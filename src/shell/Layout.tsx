@@ -510,7 +510,18 @@ export const Layout: React.FC<LayoutProps> = ({
 
         {/* Right: Notes, Learning Flow & Check Quiz Panel (Desktop) */}
         {currentModule && (
-          <div className="vls-desktop-drawer">
+          <div
+            className="vls-desktop-drawer"
+            style={{
+              width: '360px',
+              minWidth: '360px',
+              borderLeft: '1px solid var(--border)',
+              display: 'flex',
+              flexDirection: 'column',
+              height: 'calc(100vh - 54px)',
+              overflowY: 'auto',
+            }}
+          >
             <NotesPanel
               moduleSpec={currentModule}
               flowStep={learningFlow.currentStep}
@@ -550,12 +561,16 @@ export const Layout: React.FC<LayoutProps> = ({
             <div
               style={{
                 backgroundColor: 'var(--surface)',
-                maxHeight: '85vh',
-                borderTopLeftRadius: '16px',
-                borderTopRightRadius: '16px',
+                maxHeight: '88vh',
+                maxWidth: '680px',
+                width: '100%',
+                margin: '0 auto',
+                borderTopLeftRadius: '20px',
+                borderTopRightRadius: '20px',
                 display: 'flex',
                 flexDirection: 'column',
                 overflow: 'hidden',
+                boxShadow: '0 -8px 30px rgba(0,0,0,0.2)',
               }}
               onClick={(e) => e.stopPropagation()}
             >

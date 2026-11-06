@@ -100,13 +100,13 @@ export const NotesPanel: React.FC<NotesPanelProps> = ({
     <aside
       className={`vls-notes-panel ${className}`}
       style={{
-        width: '340px',
-        minWidth: '340px',
+        width: '100%',
+        maxWidth: '100%',
         backgroundColor: 'var(--surface)',
-        borderLeft: '1px solid var(--border)',
         display: 'flex',
         flexDirection: 'column',
-        height: 'calc(100vh - 54px)',
+        flex: 1,
+        height: '100%',
         overflowY: 'auto',
       }}
       aria-label="Notes, Learning Flow and Checks"
