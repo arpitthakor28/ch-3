@@ -43,7 +43,9 @@ export const MODULE_CATEGORIES: {
   },
 ];
 
-export function getModuleById(id: string): ModuleSpec | undefined {
-  return ALL_MODULES.find((m) => m.meta.id.toLowerCase() === id.toLowerCase());
+export function getModuleById(id?: string | null): ModuleSpec | undefined {
+  if (!id || typeof id !== 'string') return undefined;
+  const cleanId = id.trim().toLowerCase();
+  return ALL_MODULES.find((m) => m && m.meta && m.meta.id && m.meta.id.toLowerCase() === cleanId);
 }
 

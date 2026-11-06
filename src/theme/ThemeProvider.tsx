@@ -20,33 +20,72 @@ const ThemeContext = createContext<ThemeContextType>({
   setReducedMotion: () => {},
 });
 
+const safeGetItem = (key: string): string | null => {
+  try {
+    return typeof window !== 'undefined' && window.localStorage ? localStorage.getItem(key) : null;
+  } catch {
+    return null;
+  }
+};
+
+const safeSetItem = (key: string, value: string): void => {
+  try {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      localStorage.setItem(key, value);
+    }
+  } catch {
+    // Storage restricted or unavailable
+  }
+};
+
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [currentModule, setCurrentModule] = useState<ModuleId>('hub');
   const [highContrast, setHighContrast] = useState<boolean>(() => {
-    return localStorage.getItem('vls_high_contrast') === 'true';
+    return safeGetItem('vls_high_contrast') === 'true';
   });
   const [reducedMotion, setReducedMotion] = useState<boolean>(() => {
-    return localStorage.getItem('vls_reduced_motion') === 'true' ||
-      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    try {
+      return (
+        safeGetItem('vls_reduced_motion') === 'true' ||
+        (typeof window !== 'undefined' &&
+          window.matchMedia &&
+          window.matchMedia('(prefers-reduced-motion: reduce)').matches)
+      );
+    } catch {
+      return false;
+    }
   });
 
   useEffect(() => {
-    // Apply module theme data attribute to documentElement as per PRD 4.4 and Section 5
-    if (currentModule && currentModule !== 'hub') {
-      document.documentElement.dataset.module = currentModule;
-    } else {
-      document.documentElement.dataset.module = 'hub';
+    try {
+      if (typeof document !== 'undefined' && document.documentElement) {
+        document.documentElement.dataset.module = currentModule && currentModule !== 'hub' ? currentModule : 'hub';
+      }
+    } catch {
+      // document dataset fallback
     }
   }, [currentModule]);
 
   useEffect(() => {
-    document.documentElement.dataset.highContrast = highContrast ? 'true' : 'false';
-    localStorage.setItem('vls_high_contrast', String(highContrast));
+    try {
+      if (typeof document !== 'undefined' && document.documentElement) {
+        document.documentElement.dataset.highContrast = highContrast ? 'true' : 'false';
+      }
+      safeSetItem('vls_high_contrast', String(highContrast));
+    } catch {
+      // ignore
+    }
   }, [highContrast]);
 
   useEffect(() => {
-    document.documentElement.dataset.reducedMotion = reducedMotion ? 'true' : 'false';
-    localStorage.setItem('vls_reduced_motion', String(reducedMotion));
+    try {
+      if (typeof document !== 'undefined' && document.documentElement) {
+        document.documentElement.dataset.reducedMotion = reducedMotion ? 'true' : 'false';
+      }
+      safeSetItem('vls_reduced_motion', String(reducedMotion));
+    } catch {
+      // ignore
+    }
   }, [reducedMotion]);
 
   const setModuleTheme = (moduleId: ModuleId) => {
