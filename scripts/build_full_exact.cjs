@@ -411,8 +411,8 @@ return `<!DOCTYPE html>
             </div>
 
             <!-- HTML5 Interactive Canvas -->
-            <div class="relative flex-1 w-full h-full rounded-xl overflow-hidden bg-gradient-to-b from-slate-50 to-slate-100/60 border border-slate-200/80 flex items-center justify-center">
-                <canvas id="sim-canvas" class="w-full h-full cursor-grab active:cursor-grabbing"></canvas>
+            <div class="relative flex-1 w-full min-h-[320px] rounded-xl overflow-hidden bg-gradient-to-b from-slate-50 to-slate-100/60 border border-slate-200/80">
+                <canvas id="sim-canvas" class="absolute inset-0 w-full h-full cursor-grab active:cursor-grabbing block"></canvas>
                 
                 <!-- Dynamic Milestone Notification -->
                 <div id="outcome-banner" class="absolute bottom-5 inset-x-5 max-w-lg mx-auto bg-white/95 backdrop-blur-md border border-slate-200 rounded-xl p-3 shadow-lg flex items-center justify-between gap-3 transition-all duration-300 transform translate-y-24 opacity-0 pointer-events-none z-20">
@@ -1386,7 +1386,7 @@ return `<!DOCTYPE html>
                 svgTitle: "Tissue Culture Cycle", svgTag: "Plant Biotechnology",
                 svgLabels: ["Root Explant", "Callus Mass", "Organogenesis"],
                 principle: "Explanted parenchyma cells dedifferentiate in nutrient media with auxins/cytokinins to form a callus, which then redifferentiates.",
-                formula: "$$\\text{Callus} \\xrightarrow[\\text{High Cytokinin}]{\\text{High Auxin}} \\text{Shoot + Root}$$",
+                formula: "$$\\text{Callus} \\longrightarrow \\text{Shoot + Root}$$",
                 tip: "💡 High auxin:cytokinin ratio induces root development; high cytokinin:auxin ratio triggers shoot bud regeneration!",
                 quiz: [
                     {
@@ -1448,6 +1448,26 @@ return `<!DOCTYPE html>
                 ]
             }
         };
+
+        // Polyfill for CanvasRenderingContext2D.prototype.roundRect if missing in older browsers
+        if (!CanvasRenderingContext2D.prototype.roundRect) {
+            CanvasRenderingContext2D.prototype.roundRect = function(x, y, w, h, r) {
+                if (typeof r === 'undefined') r = 5;
+                if (typeof r === 'number') r = {tl: r, tr: r, br: r, bl: r};
+                this.beginPath();
+                this.moveTo(x + (r.tl || 0), y);
+                this.lineTo(x + w - (r.tr || 0), y);
+                this.quadraticCurveTo(x + w, y, x + w, y + (r.tr || 0));
+                this.lineTo(x + w, y + h - (r.br || 0));
+                this.quadraticCurveTo(x + w, y + h, x + w - (r.br || 0), y + h);
+                this.lineTo(x + (r.bl || 0), y + h);
+                this.quadraticCurveTo(x, y + h, x, y + h - (r.bl || 0));
+                this.lineTo(x, y + (r.tl || 0));
+                this.quadraticCurveTo(x, y, x + (r.tl || 0), y);
+                this.closePath();
+                return this;
+            };
+        }
 
         class VirtualLabSimulator {
             constructor() {
@@ -1554,17 +1574,24 @@ return `<!DOCTYPE html>
             initCanvas() {
                 this.resizeCanvas();
                 window.addEventListener('resize', () => this.resizeCanvas());
+                window.addEventListener('load', () => this.resizeCanvas());
+                setTimeout(() => this.resizeCanvas(), 50);
+                setTimeout(() => this.resizeCanvas(), 300);
                 this.bindCanvasPan();
             }
 
             resizeCanvas() {
-                if (!this.canvas.parentElement) return;
+                if (!this.canvas || !this.canvas.parentElement) return;
                 const rect = this.canvas.parentElement.getBoundingClientRect();
-                this.canvas.width = rect.width * window.devicePixelRatio;
-                this.canvas.height = rect.height * window.devicePixelRatio;
-                this.ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
-                this.canvas.style.width = \`\${rect.width}px\`;
-                this.canvas.style.height = \`\${rect.height}px\`;
+                const dpr = window.devicePixelRatio || 1;
+                const width = Math.floor(rect.width || this.canvas.parentElement.clientWidth || 600);
+                const height = Math.floor(rect.height || this.canvas.parentElement.clientHeight || 450);
+                if (width <= 0 || height <= 0) return;
+                
+                this.canvas.width = width * dpr;
+                this.canvas.height = height * dpr;
+                this.canvas.style.width = width + 'px';
+                this.canvas.style.height = height + 'px';
             }
 
             bindCanvasPan() {
@@ -2169,38 +2196,50 @@ return `<!DOCTYPE html>
 
             // --- ANIMATION LOOP ---
             loop() {
-                const w = this.canvas.clientWidth;
-                const h = this.canvas.clientHeight;
+                if (!this.canvas || !this.ctx) return;
+                const dpr = window.devicePixelRatio || 1;
+                const w = this.canvas.clientWidth || (this.canvas.width / dpr) || 600;
+                const h = this.canvas.clientHeight || (this.canvas.height / dpr) || 450;
                 this.animTime += 0.025;
-                this.ctx.clearRect(0, 0, w, h);
 
-                // Apply Pan & Zoom
+                // Reset transform and clear pixel buffer
                 this.ctx.save();
+                this.ctx.setTransform(1, 0, 0, 1, 0, 0);
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                this.ctx.restore();
+
+                // Apply DPR, Pan & Zoom
+                this.ctx.save();
+                this.ctx.scale(dpr, dpr);
                 this.ctx.translate(w / 2 + this.panX, h / 2 + this.panY);
                 this.ctx.scale(this.zoomLevel, this.zoomLevel);
                 this.ctx.translate(-w / 2, -h / 2);
 
                 // Draw Active Experiment
-                switch(this.currentModule) {
-                    case 'M01': this.drawM01(w, h); break;
-                    case 'M02': this.drawM02(w, h); break;
-                    case 'M03': this.drawM03(w, h); break;
-                    case 'M04': this.drawM04(w, h); break;
-                    case 'M05': this.drawM05(w, h); break;
-                    case 'M06': this.drawM06(w, h); break;
-                    case 'M07': this.drawM07(w, h); break;
-                    case 'M08': this.drawM08(w, h); break;
-                    case 'M09': this.drawM09(w, h); break;
-                    case 'M10': this.drawM10(w, h); break;
-                    case 'M11': this.drawM11(w, h); break;
-                    case 'M12': this.drawM12(w, h); break;
-                    case 'M13': this.drawM13(w, h); break;
-                    case 'M14': this.drawM14(w, h); break;
-                    case 'M15': this.drawM15(w, h); break;
-                    case 'M16': this.drawM16(w, h); break;
-                    case 'M17': this.drawM17(w, h); break;
-                    case 'M18': this.drawM18(w, h); break;
-                    default: this.drawM01(w, h); break;
+                try {
+                    switch(this.currentModule) {
+                        case 'M01': this.drawM01(w, h); break;
+                        case 'M02': this.drawM02(w, h); break;
+                        case 'M03': this.drawM03(w, h); break;
+                        case 'M04': this.drawM04(w, h); break;
+                        case 'M05': this.drawM05(w, h); break;
+                        case 'M06': this.drawM06(w, h); break;
+                        case 'M07': this.drawM07(w, h); break;
+                        case 'M08': this.drawM08(w, h); break;
+                        case 'M09': this.drawM09(w, h); break;
+                        case 'M10': this.drawM10(w, h); break;
+                        case 'M11': this.drawM11(w, h); break;
+                        case 'M12': this.drawM12(w, h); break;
+                        case 'M13': this.drawM13(w, h); break;
+                        case 'M14': this.drawM14(w, h); break;
+                        case 'M15': this.drawM15(w, h); break;
+                        case 'M16': this.drawM16(w, h); break;
+                        case 'M17': this.drawM17(w, h); break;
+                        case 'M18': this.drawM18(w, h); break;
+                        default: this.drawM01(w, h); break;
+                    }
+                } catch(drawErr) {
+                    console.error('Simulation draw error:', drawErr);
                 }
 
                 // Render dynamic particles
@@ -2740,3 +2779,4 @@ console.log('Successfully written docs/index.html');
 // Write to docs/404.html
 fs.writeFileSync(path.join(__dirname, '..', 'docs', '404.html'), fullHtml, 'utf8');
 console.log('Successfully written docs/404.html');
+
