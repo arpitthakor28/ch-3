@@ -1,0 +1,156 @@
+/* Modern White-Theme Design System: Clean White Background across all modules with vibrant 3D accents */
+
+:root, [data-module="hub"] {
+  --bg: #F8FAFC;
+  --surface: #FFFFFF;
+  --text: #0F172A;
+  --primary: #2563EB;
+  --secondary: #D97706;
+  --accent: #059669;
+  --border: #E2E8F0;
+  --focus: #2563EB;
+  --is-dark: 0;
+}
+
+/* M01: Onion Root Growth (Clean White with royal botanical purple & blue accents) */
+[data-module="M01"] {
+  --bg: #FFFFFF;
+  --surface: #FFFFFF;
+  --text: #0F172A;
+  --primary: #7C3AED;
+  --secondary: #0284C7;
+  --accent: #EA580C;
+  --border: #E2E8F0;
+  --focus: #7C3AED;
+  --is-dark: 0;
+}
+
+/* M02: Plant Growth Zones (Clean White with fresh emerald green & amber accents) */
+[data-module="M02"] {
+  --bg: #FFFFFF;
+  --surface: #FFFFFF;
+  --text: #0F172A;
+  --primary: #16A34A;
+  --secondary: #B45309;
+  --accent: #EA580C;
+  --border: #E2E8F0;
+  --focus: #16A34A;
+  --is-dark: 0;
+}
+
+/* M03: Virtual Tissue Microscope (Clean White stage with high-contrast scientific azure accents) */
+[data-module="M03"] {
+  --bg: #FFFFFF;
+  --surface: #FFFFFF;
+  --text: #0F172A;
+  --primary: #0284C7;
+  --secondary: #D97706;
+  --accent: #DB2777;
+  --border: #E2E8F0;
+  --focus: #0284C7;
+  --is-dark: 0;
+}
+
+/* M04: Xylem and Phloem Transport (Clean White with cobalt blue & vermillion accents) */
+[data-module="M04"] {
+  --bg: #FFFFFF;
+  --surface: #FFFFFF;
+  --text: #0F172A;
+  --primary: #0072B2;
+  --secondary: #D55E00;
+  --accent: #16A34A;
+  --border: #E2E8F0;
+  --focus: #0072B2;
+  --is-dark: 0;
+}
+
+/* M05: Animal Tissue Explorer (Clean White with crimson & teal accents) */
+[data-module="M05"] {
+  --bg: #FFFFFF;
+  --surface: #FFFFFF;
+  --text: #0F172A;
+  --primary: #E11D48;
+  --secondary: #0D9488;
+  --accent: #B45309;
+  --border: #E2E8F0;
+  --focus: #E11D48;
+  --is-dark: 0;
+}
+
+/* M06: Connective Tissue Comparison (Clean White with indigo & amber accents) */
+[data-module="M06"] {
+  --bg: #FFFFFF;
+  --surface: #FFFFFF;
+  --text: #0F172A;
+  --primary: #6366F1;
+  --secondary: #D97706;
+  --accent: #059669;
+  --border: #E2E8F0;
+  --focus: #6366F1;
+  --is-dark: 0;
+}
+
+/* M07: Muscle Types Explorer (Clean White with ruby & coral accents) */
+[data-module="M07"] {
+  --bg: #FFFFFF;
+  --surface: #FFFFFF;
+  --text: #0F172A;
+  --primary: #E11D48;
+  --secondary: #EA580C;
+  --accent: #0284C7;
+  --border: #E2E8F0;
+  --focus: #E11D48;
+  --is-dark: 0;
+}
+
+/* M08: Neuron Signal Explorer (Clean White with electric violet & amber glow accents) */
+[data-module="M08"] {
+  --bg: #FFFFFF;
+  --surface: #FFFFFF;
+  --text: #0F172A;
+  --primary: #7C3AED;
+  --secondary: #2563EB;
+  --accent: #F59E0B;
+  --border: #E2E8F0;
+  --focus: #7C3AED;
+  --is-dark: 0;
+}
+
+/* M09: Muscle-Bone Movement Model (Clean White with navy & copper accents) */
+[data-module="M09"] {
+  --bg: #FFFFFF;
+  --surface: #FFFFFF;
+  --text: #0F172A;
+  --primary: #2563EB;
+  --secondary: #DC2626;
+  --accent: #059669;
+  --border: #E2E8F0;
+  --focus: #2563EB;
+  --is-dark: 0;
+}
+
+/* M10: Joint Movement Sandbox (Clean White with turquoise & purple accents) */
+[data-module="M10"] {
+  --bg: #FFFFFF;
+  --surface: #FFFFFF;
+  --text: #0F172A;
+  --primary: #0D9488;
+  --secondary: #7C3AED;
+  --accent: #DC2626;
+  --border: #E2E8F0;
+  --focus: #0D9488;
+  --is-dark: 0;
+}
+
+/* M11: Skeleton Explorer (Clean White with slate bone & steel blue accents) */
+[data-module="M11"] {
+  --bg: #FFFFFF;
+  --surface: #FFFFFF;
+  --text: #0F172A;
+  --primary: #475569;
+  --secondary: #2563EB;
+  --accent: #DC2626;
+  --border: #E2E8F0;
+  --focus: #475569;
+  --is-dark: 0;
+}

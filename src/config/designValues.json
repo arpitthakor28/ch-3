@@ -1,0 +1,72 @@
+{
+  "M01": {
+    "jarA_reference": [0.2, 0.8, 1.8, 2.9, 3.8, 4.9, 5.8],
+    "jarB_cut_reference": [0.2, 0.7, 1.6, 1.6, 1.6, 1.6, 1.6],
+    "jarB_uncut_reference": [0.2, 0.7, 1.6, 2.6, 3.6, 4.7, 5.6],
+    "day4_jarB_ghost_cm": 2.6,
+    "cut_removal_cm": 1.0,
+    "lab_mode_jitter_cm": 0.15,
+    "graph_y_max": 6.0,
+    "graph_y_step": 0.5
+  },
+  "M02": {
+    "max_seasons": 5,
+    "grass_regrowth_seasons": 2,
+    "teak_table": {
+      "ages": [5, 10, 20, 25, 30, 40],
+      "diameters": [4, 8, 24, 28, 32, 40],
+      "rings": [5, 10, 20, 25, 30, 40]
+    },
+    "ring_count_test_target": 7
+  },
+  "M03": {
+    "zoom_levels": [1.0, 2.2, 4.5],
+    "min_tissues_clicked": 6,
+    "find_it_pass_score": 4
+  },
+  "M04": {
+    "particle_count": 40,
+    "path_gap_px": 14,
+    "closed_stomata_speed_ratio": 0.2,
+    "speed_multipliers": [0.5, 1.0, 2.0]
+  },
+  "M05": {
+    "passing_accuracy_percent": 80,
+    "match_items_count": 5
+  },
+  "M06": {
+    "plasma_percent": 55,
+    "formed_elements_percent": 45,
+    "rbc_lifespan_days": 120
+  },
+  "M07": {
+    "exercise_speeds": {
+      "rest": 1.0,
+      "walk": 1.6,
+      "run": 2.4
+    }
+  },
+  "M08": {
+    "pulse_duration_ms": 2400,
+    "parts_count": 5
+  },
+  "M09": {
+    "max_angle_deg": 145,
+    "angle_multiplier": 1.45,
+    "muscle_contraction_shortening_ratio": 0.2,
+    "relax_duration_ms": 1000
+  },
+  "M10": {
+    "limits": {
+      "elbow_knee_max_deg": 145,
+      "neck_rotation_max_deg": 80,
+      "shoulder_cone_deg": 90,
+      "skull_deg": 0
+    }
+  },
+  "M11": {
+    "rib_pairs_count": 12,
+    "skeleton_weight_percent_min": 12,
+    "skeleton_weight_percent_max": 15
+  }
+}
