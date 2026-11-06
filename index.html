@@ -1,25 +1,1895 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="color-scheme" content="light" />
-    <title>Virtual Lab Simulator (VLS) · Class 9 Chapter 3: Tissues in Action</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>NCERT Class 9 Biology Lab | Chapter 3: Tissues in Action</title>
+    
+    <meta name="author" content="VLS Biology Lab">
+    <meta name="copyright" content="NCERT Class 9 Science Virtual Lab Simulator">
+    <meta name="color-scheme" content="light">
+    
+    <!-- Tailwind CSS CDN for instant, zero-build styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    
+    <!-- KaTeX for crisp scientific formulas and cellular kinematics -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    <!-- Canvas Confetti for mastery milestones -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.4/dist/confetti.browser.min.js"></script>
+
     <style>
-      :root, html, body, #root {
-        background-color: #FFFFFF !important;
-        color: #0F172A !important;
-        margin: 0;
-        padding: 0;
-        min-height: 100vh;
-      }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700;800&family=Orbitron:wght@600;700;800&display=swap');
+
+        :root { 
+            --bg: #f8fafc; 
+            --panel-bg: rgba(255, 255, 255, 0.94);
+            --panel-border: #e2e8f0;
+            --primary: #2563eb;
+            --accent: #059669;
+        }
+        
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        html, body { 
+            height: 100%;
+            height: 100dvh;
+            margin: 0; 
+            padding: 0;
+            overflow: hidden;
+            background-color: #ffffff; 
+            color: #0f172a; 
+            font-family: 'Inter', system-ui, sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .math-font { font-family: 'JetBrains Mono', monospace; }
+        .digital-font { font-family: 'Orbitron', monospace; }
+
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+        .glass-panel { 
+            background: var(--panel-bg); 
+            backdrop-filter: blur(16px); 
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--panel-border); 
+            border-radius: 1.25rem; 
+            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.02); 
+        }
+
+        /* Sliders - Precision Science Theme */
+        input[type="range"] { 
+            -webkit-appearance: none; 
+            width: 100%; 
+            height: 6px; 
+            background: #e2e8f0; 
+            border-radius: 4px; 
+            outline: none; 
+        }
+        input[type="range"]::-webkit-slider-thumb { 
+            -webkit-appearance: none; 
+            width: 18px; 
+            height: 18px; 
+            background: #ffffff; 
+            border-radius: 50%; 
+            cursor: pointer; 
+            transition: all 0.15s ease; 
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15); 
+            border: 2.5px solid var(--primary);
+        }
+        input[type="range"]::-webkit-slider-thumb:hover { 
+            transform: scale(1.2); 
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); 
+        }
+
+        .slider-purple::-webkit-slider-thumb { border-color: #7c3aed; box-shadow: 0 0 10px rgba(124, 58, 237, 0.4); }
+        .slider-purple::-webkit-slider-runnable-track { background: linear-gradient(90deg, #ddd6fe, #7c3aed); border-radius: 4px; }
+
+        .slider-cyan::-webkit-slider-thumb { border-color: #0284c7; box-shadow: 0 0 10px rgba(2, 132, 199, 0.4); }
+        .slider-cyan::-webkit-slider-runnable-track { background: linear-gradient(90deg, #bae6fd, #0284c7); border-radius: 4px; }
+        
+        .slider-emerald::-webkit-slider-thumb { border-color: #059669; box-shadow: 0 0 10px rgba(5, 150, 105, 0.4); }
+        .slider-emerald::-webkit-slider-runnable-track { background: linear-gradient(90deg, #a7f3d0, #059669); border-radius: 4px; }
+        
+        .slider-amber::-webkit-slider-thumb { border-color: #d97706; box-shadow: 0 0 10px rgba(217, 119, 6, 0.4); }
+        .slider-amber::-webkit-slider-runnable-track { background: linear-gradient(90deg, #fde68a, #d97706); border-radius: 4px; }
+
+        .slider-rose::-webkit-slider-thumb { border-color: #e11d48; box-shadow: 0 0 10px rgba(225, 29, 72, 0.4); }
+        .slider-rose::-webkit-slider-runnable-track { background: linear-gradient(90deg, #fecdd3, #e11d48); border-radius: 4px; }
+
+        /* Toggles */
+        .toggle-checkbox:checked { right: 0; border-color: #2563eb; }
+        .toggle-checkbox:checked + .toggle-label { background-color: #2563eb; }
+
+        /* Responsive Canvas Stage */
+        #reaction-canvas-container {
+            background-color: #ffffff; 
+            border-radius: 16px; 
+            border: 1px solid #cbd5e1;
+            box-shadow: 0 8px 25px -8px rgba(0, 0, 0, 0.08); 
+            position: relative; 
+            overflow: hidden;
+            width: 100%; 
+            height: 100%; 
+            min-height: 220px;
+        }
+
+        .ambient-bg {
+            background: 
+                radial-gradient(circle at 90% 10%, rgba(37, 99, 235, 0.04), transparent 45%),
+                radial-gradient(circle at 10% 90%, rgba(16, 185, 129, 0.04), transparent 45%), 
+                #f8fafc;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar { width: 5px; height: 5px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: rgba(241, 245, 249, 0.6); border-radius: 3px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+        .btn-lab { 
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); 
+            position: relative; 
+            overflow: hidden; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            gap: 8px;
+        }
+        .btn-lab:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+        .btn-lab:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,0,0,0.12); }
+        .btn-lab:active:not(:disabled) { transform: translateY(0); }
+
+        .telemetry-card {
+            background: #ffffff; 
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02); 
+            border-radius: 14px; 
+            padding: 12px 16px;
+        }
+
+        .badge-purple { background: #ede9fe; color: #6d28d9; border: 1px solid #ddd6fe; }
+        .badge-cyan { background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; }
+        .badge-amber { background: #fef3c7; color: #b45309; border: 1px solid #fde68a; }
+        .badge-rose { background: #ffe4e6; color: #be123c; border: 1px solid #fecdd3; }
+        .badge-emerald { background: #d1fae5; color: #047857; border: 1px solid #a7f3d0; }
+
+        @keyframes pulse-subtle {
+            0%, 100% { opacity: 0.9; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.05); }
+        }
+        .vector-pulse {
+            animation: pulse-subtle 2s infinite ease-in-out;
+            transform-origin: center;
+        }
     </style>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+</head>
+<body class="h-full flex flex-col p-2 sm:p-3 lg:p-3.5 gap-2 lg:gap-2.5 relative ambient-bg overflow-hidden">
+
+    <!-- COMPACT MODERN HEADER -->
+    <header class="glass-panel p-2 sm:p-2.5 px-3 sm:px-4 lg:px-5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 shrink-0 z-20">
+        <div class="flex items-center gap-2 sm:gap-3 w-full sm:w-auto justify-between sm:justify-start">
+            <div class="flex items-center gap-2 sm:gap-3">
+                <div class="w-8 h-8 sm:w-9 sm:h-9 lg:w-10 lg:h-10 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center shadow-sm shrink-0 p-1 sm:p-1.5">
+                    <i class="fa-solid fa-dna text-white text-base sm:text-lg"></i>
+                </div>
+                <div>
+                    <div class="flex items-center gap-1.5">
+                        <h1 class="text-xs sm:text-base lg:text-lg font-black text-slate-900 tracking-tight leading-tight flex items-center gap-1">
+                            NCERT CLASS 9 <span class="text-blue-600 font-semibold">• Tissues in Action</span>
+                        </h1>
+                        <span class="text-[9px] px-1.5 py-0.5 rounded bg-blue-100 text-blue-700 font-bold hidden md:inline">CH-3 VLS</span>
+                    </div>
+                    <p id="header-subtitle" class="text-[9px] sm:text-[10px] text-slate-500 uppercase tracking-widest font-semibold flex items-center gap-1 leading-none">
+                        Activity 3.1 • Apical Meristem Growth in Roots
+                    </p>
+                </div>
+            </div>
+
+            <!-- Mobile Status Badge -->
+            <div id="status-badge" class="sm:hidden px-2 py-0.5 rounded-lg text-[10px] font-bold border border-emerald-300 bg-emerald-50 text-emerald-700 flex items-center gap-1 whitespace-nowrap shadow-xs">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> READY
+            </div>
+        </div>
+
+        <!-- Header Actions & Module Selector -->
+        <div class="flex items-center gap-1.5 sm:gap-2 w-full sm:w-auto justify-end flex-wrap">
+            <!-- Module Switcher Dropdown -->
+            <div class="relative">
+                <select id="module-selector" onchange="sim.switchModule(this.value)" class="text-[11px] sm:text-xs font-bold text-slate-800 bg-white border border-slate-300 rounded-lg px-2.5 py-1.5 pr-7 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-2xs cursor-pointer appearance-none">
+                    <optgroup label="Plant Tissues">
+                        <option value="M01" selected>M01: Onion Root Apical Meristem</option>
+                        <option value="M02">M02: Plant Growth Zones & Rings</option>
+                        <option value="M03">M03: Sunflower Stem Microscope</option>
+                        <option value="M04">M04: Xylem & Phloem Transport</option>
+                    </optgroup>
+                    <optgroup label="Animal Tissues">
+                        <option value="M05">M05: Epithelial Tissue Explorer</option>
+                        <option value="M06">M06: Blood & Connective Matrix</option>
+                        <option value="M07">M07: Skeletal, Smooth & Cardiac Muscles</option>
+                        <option value="M08">M08: Neuron & Nerve Impulses</option>
+                    </optgroup>
+                    <optgroup label="Movement & Locomotion">
+                        <option value="M09">M09: Elbow Antagonistic Muscle Lever</option>
+                        <option value="M10">M10: Synovial Joints Mobility</option>
+                        <option value="M11">M11: Skeletal Architecture & Ribcage</option>
+                    </optgroup>
+                </select>
+                <i class="fa-solid fa-chevron-down absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 text-[10px] pointer-events-none"></i>
+            </div>
+
+            <!-- Sound FX Toggle -->
+            <button id="btn-sound-toggle" onclick="sim.toggleSound()" title="Toggle WebAudio Sound FX" class="px-2.5 py-1.5 bg-white hover:bg-slate-100 text-slate-700 hover:text-slate-900 text-xs font-bold rounded-lg transition shadow-xs border border-slate-300 flex items-center gap-1 cursor-pointer">
+                <i id="sound-icon-on" class="fa-solid fa-volume-high text-emerald-600"></i>
+                <i id="sound-icon-off" class="fa-solid fa-volume-xmark text-slate-400 hidden"></i>
+                <span id="sound-label" class="hidden md:inline">Audio</span>
+            </button>
+
+            <!-- Chapter Quiz Modal Trigger -->
+            <button onclick="sim.openQuizModal()" class="px-2.5 sm:px-3 py-1.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white text-[11px] sm:text-xs font-black rounded-lg uppercase tracking-wider transition shadow-sm flex items-center gap-1 cursor-pointer">
+                <i class="fa-solid fa-graduation-cap"></i>
+                <span class="hidden sm:inline">Chapter Quiz</span>
+                <span class="sm:hidden">Quiz</span>
+            </button>
+
+            <!-- Reset Lab Button -->
+            <button onclick="sim.resetSim()" class="px-2.5 sm:px-3 py-1.5 bg-white hover:bg-slate-100 text-slate-700 hover:text-slate-900 text-xs font-bold rounded-lg uppercase tracking-wider transition shadow-xs border border-slate-300 flex items-center gap-1 cursor-pointer">
+                <i class="fa-solid fa-rotate-left text-xs"></i>
+                <span>Reset</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- MOBILE NAVIGATION SEGMENTED TABS (Visible only on < lg screens) -->
+    <div class="flex lg:hidden bg-slate-200/90 p-1 rounded-xl text-xs font-bold shrink-0 shadow-inner">
+        <button onclick="sim.switchMobileTab('sim')" id="tab-btn-sim" class="flex-1 py-1.5 rounded-lg transition bg-white text-blue-700 shadow-sm flex items-center justify-center gap-1 cursor-pointer">
+            <span>🔬 Lab Stage</span>
+        </button>
+        <button onclick="sim.switchMobileTab('ctrl')" id="tab-btn-ctrl" class="flex-1 py-1.5 rounded-lg transition text-slate-600 flex items-center justify-center gap-1 cursor-pointer">
+            <span>⚙️ Tools & Presets</span>
+        </button>
+        <button onclick="sim.switchMobileTab('data')" id="tab-btn-data" class="flex-1 py-1.5 rounded-lg transition text-slate-600 flex items-center justify-center gap-1 cursor-pointer">
+            <span>📊 Observations & Theory</span>
+        </button>
+    </div>
+
+    <!-- MAIN INTERACTIVE WORKSPACE -->
+    <main class="flex-1 flex flex-col lg:flex-row gap-2.5 lg:gap-3 z-20 min-h-0 overflow-hidden">
+        
+        <!-- LEFT PANEL: Parameters, Sliders & Tools -->
+        <aside id="left-panel" class="glass-panel w-full lg:w-[320px] xl:w-[340px] p-3 lg:p-3.5 flex flex-col gap-2.5 shrink-0 h-full overflow-y-auto custom-scrollbar hidden lg:flex">
+            
+            <!-- Section 1: Experimental Timeline & Variables -->
+            <div class="flex items-center gap-1.5 border-b border-slate-200 pb-1">
+                <i class="fa-solid fa-sliders text-blue-600 text-xs"></i>
+                <h2 id="left-sec1-title" class="text-[11px] font-extrabold uppercase tracking-wider text-slate-800">1. Experimental Timeline</h2>
+            </div>
+
+            <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200 space-y-2.5">
+                <!-- Timeline Slider (Days 1 to 7) -->
+                <div>
+                    <div class="flex justify-between items-center mb-1">
+                        <label class="text-xs font-bold text-slate-700 flex items-center gap-1">
+                            <i class="fa-regular fa-calendar text-blue-600"></i>
+                            Experiment Day (<span class="math-font text-blue-600">t</span>)
+                        </label>
+                        <span class="mono-font text-xs font-bold px-2 py-0.5 rounded badge-purple" id="val-day">Day 1 of 7</span>
+                    </div>
+                    <input type="range" id="sl-day" min="1" max="7" step="1" value="1" class="slider-purple" oninput="sim.onDayChange(this.value)">
+                </div>
+
+                <!-- Secondary Variable Slider (Magnification / Angle / Temperature) -->
+                <div id="secondary-slider-group">
+                    <div class="flex justify-between items-center mb-1">
+                        <label id="lbl-secondary" class="text-xs font-bold text-slate-700 flex items-center gap-1">
+                            <i class="fa-solid fa-magnifying-glass text-cyan-600"></i>
+                            Zoom / Detail (<span class="math-font text-cyan-600">M</span>)
+                        </label>
+                        <span class="mono-font text-xs font-bold px-2 py-0.5 rounded badge-cyan" id="val-secondary">100x</span>
+                    </div>
+                    <input type="range" id="sl-secondary" min="40" max="400" step="10" value="100" class="slider-cyan" oninput="sim.onSecondaryChange(this.value)">
+                </div>
+            </div>
+
+            <!-- Section 2: Interactive Lab Tools -->
+            <div class="flex items-center gap-1.5 border-b border-slate-200 pb-1 mt-0.5">
+                <i class="fa-solid fa-toolbox text-blue-600 text-xs"></i>
+                <h2 class="text-[11px] font-extrabold uppercase tracking-wider text-slate-800">2. Active Lab Tools</h2>
+            </div>
+
+            <div class="grid grid-cols-2 gap-1.5">
+                <!-- Tool 1: Caliper Measurement -->
+                <button onclick="sim.toggleCaliper()" id="btn-tool-caliper" class="p-2 bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-blue-300 rounded-lg flex items-center justify-between transition cursor-pointer text-left">
+                    <div class="flex items-center gap-1.5">
+                        <div class="w-5 h-5 rounded bg-blue-100 text-blue-700 flex items-center justify-center shrink-0 text-xs">
+                            <i class="fa-solid fa-ruler"></i>
+                        </div>
+                        <span class="text-[10px] font-bold text-slate-800">Digital Ruler</span>
+                    </div>
+                    <span id="caliper-status" class="text-[9px] font-mono font-bold text-slate-500">OFF</span>
+                </button>
+
+                <!-- Tool 2: High-Precision Scissors -->
+                <button onclick="sim.triggerCut()" id="btn-tool-cut" class="p-2 bg-slate-50 hover:bg-rose-50 border border-slate-200 hover:border-rose-300 rounded-lg flex items-center justify-between transition cursor-pointer text-left">
+                    <div class="flex items-center gap-1.5">
+                        <div class="w-5 h-5 rounded bg-rose-100 text-rose-700 flex items-center justify-center shrink-0 text-xs">
+                            <i class="fa-solid fa-scissors"></i>
+                        </div>
+                        <span class="text-[10px] font-bold text-slate-800">Cut Root Tip</span>
+                    </div>
+                    <span id="cut-status" class="text-[9px] font-mono font-bold text-rose-600">CUT</span>
+                </button>
+
+                <!-- Tool 3: Staining / Contrast Dye -->
+                <button onclick="sim.toggleStain()" id="btn-tool-stain" class="p-2 bg-slate-50 hover:bg-emerald-50 border border-slate-200 hover:border-emerald-300 rounded-lg flex items-center justify-between transition cursor-pointer text-left">
+                    <div class="flex items-center gap-1.5">
+                        <div class="w-5 h-5 rounded bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 text-xs">
+                            <i class="fa-solid fa-eye-dropper"></i>
+                        </div>
+                        <span class="text-[10px] font-bold text-slate-800">Safranin Stain</span>
+                    </div>
+                    <span id="stain-status" class="text-[9px] font-mono font-bold text-slate-500">OFF</span>
+                </button>
+
+                <!-- Tool 4: Fast Auto-Step -->
+                <button onclick="sim.autoPlayWeek()" id="btn-tool-autoplay" class="p-2 bg-slate-50 hover:bg-amber-50 border border-slate-200 hover:border-amber-300 rounded-lg flex items-center justify-between transition cursor-pointer text-left">
+                    <div class="flex items-center gap-1.5">
+                        <div class="w-5 h-5 rounded bg-amber-100 text-amber-800 flex items-center justify-center shrink-0 text-xs">
+                            <i class="fa-solid fa-forward-fast"></i>
+                        </div>
+                        <span class="text-[10px] font-bold text-slate-800">Auto-Run 7D</span>
+                    </div>
+                    <span class="text-[9px] font-mono font-bold text-amber-700">RUN</span>
+                </button>
+            </div>
+
+            <!-- Section 3: 6-Step Inquiry Coach & Presets -->
+            <div class="flex items-center justify-between border-b border-slate-200 pb-1 mt-0.5">
+                <div class="flex items-center gap-1.5">
+                    <i class="fa-solid fa-compass text-blue-600 text-xs"></i>
+                    <h2 class="text-[11px] font-extrabold uppercase tracking-wider text-slate-800">Inquiry & Quick Presets</h2>
+                </div>
+                <button onclick="sim.openTheoryModal()" class="text-[10px] font-bold text-blue-700 hover:text-blue-800 underline cursor-pointer">Theory</button>
+            </div>
+
+            <!-- Live Coach Card -->
+            <div id="coach-card" class="p-2.5 rounded-xl border transition-all duration-300 bg-blue-50/70 border-blue-200">
+                <div class="flex justify-between items-center mb-0.5">
+                    <span id="coach-status-title" class="text-[10px] font-black uppercase tracking-wider text-blue-900 flex items-center gap-1">
+                        <span class="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
+                        Biological Status
+                    </span>
+                    <span id="coach-distance-tag" class="text-[9.5px] font-bold font-mono px-1.5 py-0.5 rounded bg-white border border-blue-200 text-blue-800">Day 1</span>
+                </div>
+                <div class="w-full h-1.5 bg-slate-200 rounded-full overflow-hidden my-1">
+                    <div id="coach-progress-bar" class="h-full transition-all duration-300 rounded-full bg-blue-600" style="width: 14%;"></div>
+                </div>
+                <p id="coach-advice-text" class="text-[10px] leading-tight font-medium text-slate-700">
+                    Roots in Jar A (Control) and Jar B (Treatment) are actively dividing at their apical tips.
+                </p>
+            </div>
+
+            <!-- 1-Click Preset Buttons -->
+            <div class="grid grid-cols-2 gap-1.5">
+                <button onclick="sim.applyPreset('baseline')" class="p-1.5 text-left bg-white hover:bg-blue-50 border border-slate-200 hover:border-blue-300 rounded-lg transition shadow-2xs cursor-pointer">
+                    <div class="text-[9.5px] font-extrabold text-blue-800">🌱 Intact Growth</div>
+                    <div class="text-[8.5px] text-slate-500 font-mono">Both tips intact</div>
+                </button>
+                <button onclick="sim.applyPreset('cutDay3')" class="p-1.5 text-left bg-white hover:bg-rose-50 border border-slate-200 hover:border-rose-300 rounded-lg transition shadow-2xs cursor-pointer">
+                    <div class="text-[9.5px] font-extrabold text-rose-800">✂️ Excision Day 3</div>
+                    <div class="text-[8.5px] text-slate-500 font-mono">Cut Jar B 1 cm</div>
+                </button>
+                <button onclick="sim.applyPreset('compare')" class="p-1.5 text-left bg-white hover:bg-amber-50 border border-slate-200 hover:border-amber-300 rounded-lg transition shadow-2xs cursor-pointer">
+                    <div class="text-[9.5px] font-extrabold text-amber-800">📊 Full 7-Day Comparison</div>
+                    <div class="text-[8.5px] text-slate-500 font-mono">Table 3.1 Data</div>
+                </button>
+                <button onclick="sim.applyPreset('microscope')" class="p-1.5 text-left bg-white hover:bg-emerald-50 border border-slate-200 hover:border-emerald-300 rounded-lg transition shadow-2xs cursor-pointer">
+                    <div class="text-[9.5px] font-extrabold text-emerald-800">🔬 Cell Cross-Section</div>
+                    <div class="text-[8.5px] text-slate-500 font-mono">Meristem Cells</div>
+                </button>
+            </div>
+
+            <!-- Primary Action Button -->
+            <button id="btn-primary-action" onclick="sim.advanceDay()" class="btn-lab w-full mt-auto py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-extrabold uppercase tracking-wider text-xs shadow-sm border border-blue-500 shrink-0 cursor-pointer">
+                <i class="fa-solid fa-play"></i>
+                <span id="btn-action-label">Record Reading & Advance Day</span>
+            </button>
+        </aside>
+
+        <!-- CENTER: Canvas Simulation Display -->
+        <section id="center-panel" class="flex flex-col relative h-full min-h-0 flex-1">
+            <div id="reaction-canvas-container" class="flex-1 w-full h-full relative">
+                
+                <!-- HUD Top-Left Badge -->
+                <div class="absolute top-2.5 sm:top-3 left-2.5 sm:left-3 z-10 bg-white/95 backdrop-blur-md px-2.5 py-1 rounded-lg border border-slate-200 shadow-2xs flex items-center gap-1.5 pointer-events-none">
+                    <span class="w-2 h-2 rounded-full bg-blue-600 animate-pulse"></span>
+                    <span id="canvas-hud-title" class="text-[10px] font-bold uppercase tracking-wider text-slate-800">
+                        NCERT Activity 3.1: Onion Root Apical Meristem
+                    </span>
+                </div>
+
+                <!-- Simulation Milestone Overlay -->
+                <div id="outcome-overlay" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20 text-center pointer-events-none opacity-0 transition-opacity duration-300 w-11/12 max-w-sm">
+                    <div id="outcome-card" class="bg-white/95 backdrop-blur-md p-4 sm:p-6 rounded-2xl border border-slate-200 shadow-2xl">
+                        <div id="outcome-text" class="text-3xl sm:text-4xl font-black italic tracking-tight text-blue-700 uppercase">
+                            APICAL MERISTEM CUT
+                        </div>
+                        <p id="outcome-sub" class="text-[10px] sm:text-xs font-bold uppercase tracking-widest text-slate-600 mt-1">
+                            Elongation in Jar B Ceased Permanently
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Canvas Legend -->
+                <div class="absolute top-2.5 sm:top-3 right-2.5 sm:right-3 z-10 bg-white/95 backdrop-blur-md px-2.5 py-1.5 rounded-xl border border-slate-200 shadow-2xs flex flex-col gap-1 pointer-events-none text-[9px] font-bold uppercase tracking-wider text-slate-600">
+                    <div class="flex items-center gap-1.5">
+                        <span class="w-3 h-1 bg-blue-600 rounded-full"></span> 
+                        <span>Jar A (Control • Intact Tip)</span>
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                        <span class="w-3 h-1 bg-amber-500 rounded-full"></span> 
+                        <span>Jar B (Treatment • Tip Excised)</span>
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                        <span class="w-2 h-2 rounded-full bg-rose-500"></span> 
+                        <span>Apical Meristem Zone</span>
+                    </div>
+                </div>
+
+                <!-- The Interactive Canvas -->
+                <canvas id="sim-canvas" class="w-full h-full block absolute inset-0 cursor-crosshair"></canvas>
+            </div>
+
+            <!-- Mobile Quick Action Strip (visible on mobile only) -->
+            <div id="mobile-quick-strip" class="flex lg:hidden flex-col gap-1.5 mt-2 pt-1 border-t border-slate-200/80">
+                <div class="flex items-center justify-between px-1">
+                    <div class="flex items-center gap-1.5 text-[11px] font-bold text-slate-700">
+                        <span class="w-2 h-2 rounded-full bg-blue-600"></span>
+                        <span class="text-slate-500 font-semibold text-[10px] uppercase">Jar A:</span>
+                        <span id="mobile-dist-a" class="font-mono text-blue-700 font-bold bg-blue-50 px-1.5 py-0.5 rounded border border-blue-200">1.0 cm</span>
+                        <span class="text-slate-500 font-semibold text-[10px] uppercase ml-1">Jar B:</span>
+                        <span id="mobile-dist-b" class="font-mono text-amber-700 font-bold bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200">1.0 cm</span>
+                    </div>
+                    <span id="mobile-verdict-badge" class="text-[10px] font-extrabold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-300">GROWING</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button onclick="sim.advanceDay()" class="btn-lab flex-1 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-extrabold uppercase tracking-wider text-xs shadow-sm flex items-center justify-center gap-1.5 cursor-pointer">
+                        <i class="fa-solid fa-play"></i>
+                        <span>Next Day</span>
+                    </button>
+                    <button onclick="sim.triggerCut()" class="px-3.5 py-2.5 bg-rose-50 hover:bg-rose-100 border border-rose-300 text-rose-700 font-bold text-xs rounded-xl flex items-center gap-1 cursor-pointer">
+                        <i class="fa-solid fa-scissors"></i>
+                        <span>Cut B</span>
+                    </button>
+                    <button onclick="sim.switchMobileTab('ctrl')" class="px-3 py-2.5 bg-white hover:bg-slate-50 border border-slate-300 text-slate-700 font-bold text-xs rounded-xl flex items-center gap-1 cursor-pointer">
+                        <i class="fa-solid fa-sliders text-slate-600"></i>
+                        <span>Tune</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- RIGHT PANEL: Empirical Observation Table, Graphs & NCERT Theory -->
+        <aside id="right-panel" class="glass-panel w-full lg:w-[310px] xl:w-[330px] p-3 lg:p-3.5 flex flex-col gap-2.5 shrink-0 h-full overflow-y-auto custom-scrollbar hidden lg:flex">
+            
+            <div class="flex items-center gap-1.5 border-b border-slate-200 pb-1">
+                <i class="fa-solid fa-chart-column text-blue-600 text-xs"></i>
+                <h2 class="text-[11px] font-extrabold uppercase tracking-wider text-slate-800">Table 3.1 Observations</h2>
+            </div>
+
+            <!-- Comparison Cards: Jar A vs Jar B -->
+            <div class="grid grid-cols-2 gap-2 shrink-0">
+                <div class="telemetry-card flex flex-col justify-center border-l-4 border-l-blue-600 p-2.5">
+                    <span class="text-[9px] font-bold uppercase tracking-wider text-blue-700 mb-0.5">Jar A (Control)</span>
+                    <div class="flex items-baseline gap-1">
+                        <span id="tel-len-a" class="digital-font text-xl font-black text-blue-950">1.0</span>
+                        <span class="text-[10px] text-blue-600 font-bold">cm</span>
+                    </div>
+                    <span id="tel-res-a" class="text-[8.5px] font-bold mt-0.5 text-emerald-600 uppercase tracking-tight">Dividing • +0.5cm/d</span>
+                </div>
+                
+                <div class="telemetry-card flex flex-col justify-center border-l-4 border-l-amber-500 p-2.5">
+                    <span class="text-[9px] font-bold uppercase tracking-wider text-amber-700 mb-0.5">Jar B (Cut Tip)</span>
+                    <div class="flex items-baseline gap-1">
+                        <span id="tel-len-b" class="digital-font text-xl font-black text-amber-950">1.0</span>
+                        <span class="text-[10px] text-amber-600 font-bold">cm</span>
+                    </div>
+                    <span id="tel-res-b" class="text-[8.5px] font-bold mt-0.5 text-slate-500 uppercase tracking-tight">Active Growth</span>
+                </div>
+            </div>
+
+            <!-- Live Table 3.1 Data Grid -->
+            <div class="telemetry-card shrink-0 p-2.5">
+                <div class="flex justify-between items-center border-b border-slate-100 pb-1 mb-1.5">
+                    <span class="text-[9.5px] font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1">
+                        <span class="w-1.5 h-1.5 rounded-full bg-blue-600 animate-ping"></span>
+                        Daily Growth Matrix
+                    </span>
+                    <span id="tel-time-day" class="mono-font text-[10px] font-extrabold text-blue-700 bg-blue-50 px-1.5 py-0.5 rounded border border-blue-200">Day 1</span>
+                </div>
+                
+                <div class="overflow-x-auto">
+                    <table class="w-full text-[9px] text-center border-collapse">
+                        <thead>
+                            <tr class="bg-slate-100 text-slate-700 font-bold">
+                                <th class="p-1 border border-slate-200">Day</th>
+                                <th class="p-1 border border-slate-200 text-blue-700">Jar A (cm)</th>
+                                <th class="p-1 border border-slate-200 text-amber-700">Jar B (cm)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-3-1-body" class="font-mono text-slate-800">
+                            <!-- Populated dynamically by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Dynamic SVG Cellular Meristem Diagram -->
+            <div class="telemetry-card shrink-0 bg-gradient-to-b from-white to-slate-50/50 p-2.5">
+                <div class="flex justify-between items-center mb-0.5">
+                    <span class="text-[9.5px] font-bold uppercase tracking-wider text-slate-700 flex items-center gap-1">
+                        <i class="fa-solid fa-microscope text-blue-600"></i>
+                        Meristem Tissue Profile
+                    </span>
+                    <span id="cell-diagram-tag" class="text-[8.5px] font-bold text-blue-600 font-mono">Apical Zone</span>
+                </div>
+                
+                <div class="flex items-center justify-center p-1">
+                    <svg id="fbd-svg" viewBox="0 0 240 120" class="w-full max-w-[210px] h-[90px]">
+                        <!-- Root Tip longitudinal profile -->
+                        <path d="M 60 10 L 60 70 Q 120 115 180 70 L 180 10 Z" fill="#eff6ff" stroke="#93c5fd" stroke-width="2"/>
+                        
+                        <!-- Root Cap -->
+                        <path d="M 75 70 Q 120 115 165 70 Q 120 85 75 70 Z" fill="#fed7aa" stroke="#f97316" stroke-width="1.5"/>
+                        <text x="120" y="88" font-size="8" font-weight="bold" fill="#c2410c" text-anchor="middle">Root Cap</text>
+                        
+                        <!-- Dividing Apical Meristem Cells -->
+                        <g id="meristem-cells-svg">
+                            <rect x="95" y="45" width="10" height="10" rx="2" fill="#7c3aed" opacity="0.85"/>
+                            <rect x="108" y="45" width="10" height="10" rx="2" fill="#7c3aed" opacity="0.85"/>
+                            <rect x="121" y="45" width="10" height="10" rx="2" fill="#7c3aed" opacity="0.85"/>
+                            <rect x="134" y="45" width="10" height="10" rx="2" fill="#7c3aed" opacity="0.85"/>
+                            <rect x="102" y="57" width="10" height="10" rx="2" fill="#7c3aed" opacity="0.85"/>
+                            <rect x="115" y="57" width="10" height="10" rx="2" fill="#7c3aed" opacity="0.85"/>
+                            <rect x="128" y="57" width="10" height="10" rx="2" fill="#7c3aed" opacity="0.85"/>
+                        </g>
+
+                        <!-- Cut plane indicator line (dashed red) -->
+                        <g id="svg-cut-indicator" style="display: none;">
+                            <line x1="45" y1="52" x2="195" y2="52" stroke="#dc2626" stroke-width="2" stroke-dasharray="3 2"/>
+                            <text x="198" y="55" font-size="8" font-weight="bold" fill="#dc2626">CUT (1cm)</text>
+                        </g>
+                    </svg>
+                </div>
+                <div class="flex justify-around text-[8.5px] font-bold text-slate-500 border-t border-slate-100 pt-1">
+                    <span class="text-purple-700">Dividing Cells</span>
+                    <span class="text-orange-600">Protective Cap</span>
+                    <span class="text-blue-600">Elongation Zone</span>
+                </div>
+            </div>
+
+            <!-- Scientific Modeling & Theory Box -->
+            <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200 text-slate-700 mt-auto">
+                <div class="flex items-center gap-1.5 border-b border-slate-200 pb-1 mb-1.5">
+                    <i class="fa-solid fa-book-open text-blue-600 text-xs"></i>
+                    <h3 class="text-[9.5px] font-extrabold text-slate-800 uppercase tracking-wider">NCERT Concept Principle</h3>
+                </div>
+                <p class="text-[10px] leading-relaxed mb-1">
+                    Growth of plants occurs only in specific localized regions containing <strong>meristematic tissue</strong>.
+                </p>
+                <p class="text-[10px] leading-relaxed mb-1.5">
+                    Apical meristem is present at growing root & stem tips: $$R = \frac{\Delta L}{\Delta t}$$
+                </p>
+                <div class="p-1.5 bg-blue-50 border border-blue-200 rounded text-[9.5px] text-blue-800 leading-snug font-medium">
+                    💡 Once the apical tip of Jar B is excised on Day 3, cell division ceases completely!
+                </div>
+            </div>
+        </aside>
+
+    </main>
+
+    <!-- INTERACTIVE KNOWLEDGE CHECK QUIZ MODAL -->
+    <div id="quiz-modal" class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-900/40 backdrop-blur-xs hidden">
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-2xl max-w-lg w-full p-4 sm:p-6 flex flex-col gap-3 sm:gap-4 relative max-h-[88vh] overflow-y-auto custom-scrollbar animate-in fade-in zoom-in-95 duration-200">
+            <button onclick="sim.closeQuizModal()" class="absolute top-3.5 right-3.5 text-slate-400 hover:text-slate-700 p-1.5 rounded-lg hover:bg-slate-100 transition cursor-pointer">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center font-black text-xl shrink-0">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                </div>
+                <div>
+                    <h3 class="text-base font-black text-slate-900">Chapter 3 Mastery Check</h3>
+                    <p class="text-[11px] text-slate-500 font-medium">Test your understanding of Plant & Animal Tissues</p>
+                </div>
+            </div>
+
+            <div id="quiz-body" class="space-y-3 text-xs">
+                <!-- Question 1 -->
+                <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
+                    <p class="font-bold text-slate-800 mb-2">1. Why did the roots in Jar B stop growing after their tips were cut?</p>
+                    <div class="space-y-1.5">
+                        <label class="flex items-center gap-2 p-2 bg-white rounded-lg border border-slate-200 cursor-pointer hover:bg-blue-50">
+                            <input type="radio" name="q1" value="a" class="cursor-pointer">
+                            <span>The water inside the jar was contaminated.</span>
+                        </label>
+                        <label class="flex items-center gap-2 p-2 bg-white rounded-lg border border-slate-200 cursor-pointer hover:bg-blue-50">
+                            <input type="radio" name="q1" value="b" class="cursor-pointer">
+                            <span class="font-semibold text-blue-700">The actively dividing apical meristem was removed.</span>
+                        </label>
+                        <label class="flex items-center gap-2 p-2 bg-white rounded-lg border border-slate-200 cursor-pointer hover:bg-blue-50">
+                            <input type="radio" name="q1" value="c" class="cursor-pointer">
+                            <span>The onion ran out of stored nutrients.</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Question 2 -->
+                <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
+                    <p class="font-bold text-slate-800 mb-2">2. Girth of the stem or root increases due to which tissue?</p>
+                    <div class="space-y-1.5">
+                        <label class="flex items-center gap-2 p-2 bg-white rounded-lg border border-slate-200 cursor-pointer hover:bg-blue-50">
+                            <input type="radio" name="q2" value="a" class="cursor-pointer">
+                            <span>Apical meristem</span>
+                        </label>
+                        <label class="flex items-center gap-2 p-2 bg-white rounded-lg border border-slate-200 cursor-pointer hover:bg-blue-50">
+                            <input type="radio" name="q2" value="b" class="cursor-pointer">
+                            <span class="font-semibold text-blue-700">Lateral meristem (cambium)</span>
+                        </label>
+                        <label class="flex items-center gap-2 p-2 bg-white rounded-lg border border-slate-200 cursor-pointer hover:bg-blue-50">
+                            <input type="radio" name="q2" value="c" class="cursor-pointer">
+                            <span>Intercalary meristem</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-between items-center pt-2 border-t border-slate-100">
+                <span id="quiz-score-badge" class="font-mono text-xs font-bold text-slate-600">Select answers to score</span>
+                <button onclick="sim.submitQuiz()" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-lg transition cursor-pointer">
+                    Submit Answers
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- THEORY MODAL -->
+    <div id="theory-modal" class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-900/40 backdrop-blur-xs hidden">
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-2xl max-w-lg w-full p-4 sm:p-6 flex flex-col gap-3 sm:gap-4 relative max-h-[88vh] overflow-y-auto custom-scrollbar animate-in fade-in zoom-in-95 duration-200">
+            <button onclick="sim.closeTheoryModal()" class="absolute top-3.5 right-3.5 text-slate-400 hover:text-slate-700 p-1.5 rounded-lg hover:bg-slate-100 transition cursor-pointer">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-black text-xl shrink-0">
+                    <i class="fa-solid fa-book-bookmark"></i>
+                </div>
+                <div>
+                    <h3 class="text-base font-black text-slate-900">NCERT Chapter 3 Key Concepts</h3>
+                    <p class="text-[11px] text-slate-500 font-medium">Class 9 Science • Tissues in Action</p>
+                </div>
+            </div>
+
+            <div class="space-y-2.5 text-xs text-slate-700 leading-relaxed">
+                <div class="p-3 bg-blue-50 border border-blue-200 rounded-xl">
+                    <h4 class="font-bold text-blue-900 mb-1">1. Apical Meristem</h4>
+                    <p>Located at the growing tips of stems and roots. Responsible for linear elongation (increase in length).</p>
+                </div>
+                <div class="p-3 bg-emerald-50 border border-emerald-200 rounded-xl">
+                    <h4 class="font-bold text-emerald-900 mb-1">2. Lateral Meristem (Cambium)</h4>
+                    <p>Causes the girth (thickness) of stems and roots to increase over time.</p>
+                </div>
+                <div class="p-3 bg-amber-50 border border-amber-200 rounded-xl">
+                    <h4 class="font-bold text-amber-900 mb-1">3. Intercalary Meristem</h4>
+                    <p>Located at internodes or the base of leaves. Allows rapid regrowth after mowing or grazing (e.g. grass).</p>
+                </div>
+                <div class="p-3 bg-purple-50 border border-purple-200 rounded-xl">
+                    <h4 class="font-bold text-purple-900 mb-1">4. Permanent Tissues</h4>
+                    <p>Once meristematic cells mature and take up specific roles, they lose the ability to divide (differentiation).</p>
+                </div>
+            </div>
+
+            <div class="flex justify-end pt-2 border-t border-slate-100">
+                <button onclick="sim.closeTheoryModal()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-lg transition cursor-pointer">
+                    Close Guide
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN SIMULATION ENGINE JAVASCRIPT -->
+    <script>
+        class VirtualLabSimulation {
+            constructor() {
+                this.canvas = document.getElementById('sim-canvas');
+                this.ctx = this.canvas.getContext('2d');
+                
+                // Active State
+                this.currentModule = 'M01';
+                this.currentDay = 1;
+                this.isCutApplied = false;
+                this.showCaliper = false;
+                this.showStain = false;
+                this.soundEnabled = true;
+                
+                // M01 Reference Measurements (cm) as per NCERT Table 3.1
+                this.jarA_ref = [1.0, 1.5, 2.1, 2.7, 3.3, 3.9, 4.5];
+                this.jarB_uncut = [1.0, 1.5, 2.0, 2.6, 3.2, 3.8, 4.4];
+                this.jarB_cut = [1.0, 1.5, 2.0, 2.0, 2.0, 2.0, 2.0];
+                
+                // Dynamic Particles System
+                this.particles = [];
+                this.bubbleTime = 0;
+                
+                this.initAudio();
+                this.cacheDOM();
+                this.handleResize();
+                window.addEventListener('resize', () => this.handleResize());
+                
+                this.updateTable();
+                this.updateTelemetry();
+                requestAnimationFrame((t) => this.loop(t));
+
+                // Initialize KaTeX formulas
+                if (window.renderMathInElement) {
+                    renderMathInElement(document.body, {
+                        delimiters: [
+                            {left: '$$', right: '$$', display: true},
+                            {left: '$', right: '$', display: false}
+                        ]
+                    });
+                }
+            }
+
+            cacheDOM() {
+                this.slDay = document.getElementById('sl-day');
+                this.valDay = document.getElementById('val-day');
+                this.telLenA = document.getElementById('tel-len-a');
+                this.telLenB = document.getElementById('tel-len-b');
+                this.telResA = document.getElementById('tel-res-a');
+                this.telResB = document.getElementById('tel-res-b');
+                this.telTimeDay = document.getElementById('tel-time-day');
+                this.tableBody = document.getElementById('table-3-1-body');
+                this.outcomeOverlay = document.getElementById('outcome-overlay');
+                this.outcomeText = document.getElementById('outcome-text');
+                this.outcomeSub = document.getElementById('outcome-sub');
+                this.leftPanel = document.getElementById('left-panel');
+                this.centerPanel = document.getElementById('center-panel');
+                this.rightPanel = document.getElementById('right-panel');
+                this.tabBtnSim = document.getElementById('tab-btn-sim');
+                this.tabBtnCtrl = document.getElementById('tab-btn-ctrl');
+                this.tabBtnData = document.getElementById('tab-btn-data');
+                this.caliperStatus = document.getElementById('caliper-status');
+                this.cutStatus = document.getElementById('cut-status');
+                this.stainStatus = document.getElementById('stain-status');
+                this.coachDistanceTag = document.getElementById('coach-distance-tag');
+                this.coachProgressBar = document.getElementById('coach-progress-bar');
+                this.coachAdviceText = document.getElementById('coach-advice-text');
+                this.svgCutIndicator = document.getElementById('svg-cut-indicator');
+            }
+
+            // WebAudio Sound Engine
+            initAudio() {
+                this.audioCtx = null;
+            }
+
+            ensureAudio() {
+                if (!this.soundEnabled) return false;
+                try {
+                    const AudioCtxClass = window.AudioContext || window.webkitAudioContext;
+                    if (!this.audioCtx && AudioCtxClass) this.audioCtx = new AudioCtxClass();
+                    if (this.audioCtx && this.audioCtx.state === 'suspended') this.audioCtx.resume();
+                    return !!this.audioCtx;
+                } catch(e) {
+                    return false;
+                }
+            }
+
+            toggleSound() {
+                this.soundEnabled = !this.soundEnabled;
+                const iconOn = document.getElementById('sound-icon-on');
+                const iconOff = document.getElementById('sound-icon-off');
+                const label = document.getElementById('sound-label');
+
+                if (this.soundEnabled) {
+                    this.ensureAudio();
+                    if (iconOn) iconOn.classList.remove('hidden');
+                    if (iconOff) iconOff.classList.add('hidden');
+                    if (label) label.innerText = "Audio";
+                    this.playClickSound(600, 0.05);
+                } else {
+                    if (iconOn) iconOn.classList.add('hidden');
+                    if (iconOff) iconOff.classList.remove('hidden');
+                    if (label) label.innerText = "Muted";
+                }
+            }
+
+            playClickSound(freq = 520, dur = 0.04) {
+                if (!this.ensureAudio()) return;
+                const ctx = this.audioCtx;
+                const now = ctx.currentTime;
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(freq, now);
+                gain.gain.setValueAtTime(0.2, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + dur);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start(now);
+                osc.stop(now + dur);
+            }
+
+            playSnipSound() {
+                if (!this.ensureAudio()) return;
+                const ctx = this.audioCtx;
+                const now = ctx.currentTime;
+                const len = Math.floor(ctx.sampleRate * 0.06);
+                const buf = ctx.createBuffer(1, len, ctx.sampleRate);
+                const data = buf.getChannelData(0);
+                for(let i=0; i<len; i++) data[i] = (Math.random()*2 - 1) * Math.exp(-i / (len * 0.2));
+                const src = ctx.createBufferSource();
+                src.buffer = buf;
+                const filter = ctx.createBiquadFilter();
+                filter.type = 'highpass';
+                filter.frequency.setValueAtTime(2800, now);
+                const gain = ctx.createGain();
+                gain.gain.setValueAtTime(0.5, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
+                src.connect(filter);
+                filter.connect(gain);
+                gain.connect(ctx.destination);
+                src.start(now);
+            }
+
+            playCelebration() {
+                if (!this.ensureAudio()) return;
+                const notes = [523.25, 659.25, 783.99, 1046.50];
+                notes.forEach((freq, idx) => {
+                    const ctx = this.audioCtx;
+                    const now = ctx.currentTime;
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(freq, now + idx * 0.08);
+                    gain.gain.setValueAtTime(0.15, now + idx * 0.08);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.6);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(now + idx * 0.08);
+                    osc.stop(now + 0.65);
+                });
+            }
+
+            handleResize() {
+                if (window.innerWidth >= 1024) {
+                    if (this.leftPanel) this.leftPanel.classList.remove('hidden');
+                    if (this.centerPanel) this.centerPanel.classList.remove('hidden');
+                    if (this.rightPanel) this.rightPanel.classList.remove('hidden');
+                } else {
+                    this.switchMobileTab('sim');
+                }
+                this.resizeCanvas();
+            }
+
+            switchMobileTab(tab) {
+                const mobileStrip = document.getElementById('mobile-quick-strip');
+                if (tab === 'sim') {
+                    if (this.centerPanel) this.centerPanel.classList.remove('hidden');
+                    if (this.leftPanel) this.leftPanel.classList.add('hidden');
+                    if (this.rightPanel) this.rightPanel.classList.add('hidden');
+                    if (mobileStrip) mobileStrip.classList.remove('hidden');
+                } else if (tab === 'ctrl') {
+                    if (this.centerPanel) this.centerPanel.classList.add('hidden');
+                    if (this.leftPanel) this.leftPanel.classList.remove('hidden');
+                    if (this.rightPanel) this.rightPanel.classList.add('hidden');
+                    if (mobileStrip) mobileStrip.classList.add('hidden');
+                } else if (tab === 'data') {
+                    if (this.centerPanel) this.centerPanel.classList.add('hidden');
+                    if (this.leftPanel) this.leftPanel.classList.add('hidden');
+                    if (this.rightPanel) this.rightPanel.classList.remove('hidden');
+                    if (mobileStrip) mobileStrip.classList.add('hidden');
+                }
+                const active = "flex-1 py-1.5 rounded-lg transition bg-white text-blue-700 shadow-sm flex items-center justify-center gap-1 cursor-pointer font-bold text-xs";
+                const inactive = "flex-1 py-1.5 rounded-lg transition text-slate-600 flex items-center justify-center gap-1 cursor-pointer font-medium text-xs";
+                if (this.tabBtnSim) this.tabBtnSim.className = tab === 'sim' ? active : inactive;
+                if (this.tabBtnCtrl) this.tabBtnCtrl.className = tab === 'ctrl' ? active : inactive;
+                if (this.tabBtnData) this.tabBtnData.className = tab === 'data' ? active : inactive;
+                setTimeout(() => this.resizeCanvas(), 50);
+            }
+
+            resizeCanvas() {
+                if (!this.canvas.parentElement) return;
+                const rect = this.canvas.parentElement.getBoundingClientRect();
+                this.canvas.width = rect.width * window.devicePixelRatio;
+                this.canvas.height = rect.height * window.devicePixelRatio;
+                this.ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+                this.canvas.style.width = `${rect.width}px`;
+                this.canvas.style.height = `${rect.height}px`;
+            }
+
+            switchModule(modId) {
+                this.currentModule = modId;
+                this.resetSim();
+                const hud = document.getElementById('canvas-hud-title');
+                const sub = document.getElementById('header-subtitle');
+                const titles = {
+                    M01: ["NCERT Activity 3.1: Onion Root Apical Meristem", "Activity 3.1 • Apical Meristem Growth in Roots"],
+                    M02: ["M02: Plant Growth Zones & Tree Rings", "Apical (Length) • Lateral (Cambium) • Intercalary (Nodes)"],
+                    M03: ["M03: Sunflower Stem Microscope Explorer", "Transverse Section (T.S.) • Epidermis, Cortex & Bundles"],
+                    M04: ["M04: Xylem & Phloem Vascular Transport", "Transpiration Pull (Xylem) • Bidirectional Translocation (Phloem)"],
+                    M05: ["M05: Epithelial Tissue Explorer", "Squamous, Cuboidal, Columnar, Ciliated & Stratified"],
+                    M06: ["M06: Blood & Connective Matrix", "Erythrocytes, Leucocytes, Platelets in Liquid Plasma"],
+                    M07: ["M07: Skeletal, Smooth & Cardiac Muscles", "Striated Multinucleate • Spindle Involuntary • Branched Rhythmic"],
+                    M08: ["M08: Neuron & Nerve Impulses", "Dendrites, Cyton, Myelinated Axon & Synaptic Terminal"],
+                    M09: ["M09: Elbow Antagonistic Muscle Lever", "Biceps & Triceps Class-3 Anatomical Lever Mechanics"],
+                    M10: ["M10: Synovial Joints Mobility", "Ball-and-Socket, Hinge & Pivot Articulations"],
+                    M11: ["M11: Skeletal Framework & Ribcage", "Axial (Skull, Spine, Ribcage) & Appendicular Limbs"]
+                };
+                const info = titles[modId] || titles.M01;
+                if (hud) hud.innerText = info[0];
+                if (sub) sub.innerText = info[1];
+                this.playClickSound(480, 0.08);
+            }
+
+            onDayChange(day) {
+                this.currentDay = parseInt(day);
+                this.valDay.innerText = `Day ${this.currentDay} of 7`;
+                this.playClickSound(500 + this.currentDay * 40, 0.03);
+                this.updateTable();
+                this.updateTelemetry();
+            }
+
+            advanceDay() {
+                if (this.currentDay < 7) {
+                    this.slDay.value = this.currentDay + 1;
+                    this.onDayChange(this.currentDay + 1);
+                } else {
+                    this.playCelebration();
+                    if (window.confetti) confetti({ particleCount: 60, spread: 55, origin: { y: 0.6 } });
+                }
+            }
+
+            triggerCut() {
+                this.playSnipSound();
+                this.isCutApplied = true;
+                this.cutStatus.innerText = "EXCISED";
+                this.cutStatus.className = "text-[9px] font-mono font-bold text-emerald-700 bg-emerald-50 px-1 rounded border border-emerald-200";
+                
+                // Spawn cut tip particles in canvas
+                const w = this.canvas.clientWidth;
+                const h = this.canvas.clientHeight;
+                const jarB_x = (w * 0.68);
+                const tipY = h * 0.65;
+                for (let i = 0; i < 15; i++) {
+                    this.particles.push({
+                        x: jarB_x + (Math.random() * 40 - 20),
+                        y: tipY,
+                        vx: (Math.random() * 4 - 2),
+                        vy: Math.random() * 2 + 1,
+                        alpha: 1.0,
+                        color: '#7c3aed'
+                    });
+                }
+
+                if (this.svgCutIndicator) this.svgCutIndicator.style.display = 'inline';
+
+                this.outcomeText.innerText = "APICAL TIP EXCISED";
+                this.outcomeSub.innerText = "Jar B 1cm root tip cut on Day 3. Cell division arrested!";
+                this.outcomeOverlay.classList.replace('opacity-0', 'opacity-100');
+                setTimeout(() => {
+                    this.outcomeOverlay.classList.replace('opacity-100', 'opacity-0');
+                }, 2200);
+
+                this.updateTable();
+                this.updateTelemetry();
+            }
+
+            toggleCaliper() {
+                this.showCaliper = !this.showCaliper;
+                this.caliperStatus.innerText = this.showCaliper ? "ON" : "OFF";
+                this.caliperStatus.className = this.showCaliper ? "text-[9px] font-mono font-bold text-blue-700 bg-blue-50 px-1 rounded" : "text-[9px] font-mono font-bold text-slate-500";
+                this.playClickSound(640, 0.04);
+            }
+
+            toggleStain() {
+                this.showStain = !this.showStain;
+                this.stainStatus.innerText = this.showStain ? "ON" : "OFF";
+                this.stainStatus.className = this.showStain ? "text-[9px] font-mono font-bold text-emerald-700 bg-emerald-50 px-1 rounded" : "text-[9px] font-mono font-bold text-slate-500";
+                this.playClickSound(700, 0.04);
+            }
+
+            autoPlayWeek() {
+                this.resetSim();
+                let day = 1;
+                const interval = setInterval(() => {
+                    if (day === 3) this.triggerCut();
+                    this.slDay.value = day;
+                    this.onDayChange(day);
+                    day++;
+                    if (day > 7) {
+                        clearInterval(interval);
+                        this.playCelebration();
+                        if (window.confetti) confetti({ particleCount: 70, spread: 60, origin: { y: 0.6 } });
+                    }
+                }, 600);
+            }
+
+            applyPreset(type) {
+                if (type === 'baseline') {
+                    this.resetSim();
+                } else if (type === 'cutDay3') {
+                    this.slDay.value = 3;
+                    this.onDayChange(3);
+                    this.triggerCut();
+                } else if (type === 'compare') {
+                    this.isCutApplied = true;
+                    this.slDay.value = 7;
+                    this.onDayChange(7);
+                } else if (type === 'microscope') {
+                    this.toggleStain();
+                    this.toggleCaliper();
+                }
+            }
+
+            resetSim() {
+                this.currentDay = 1;
+                this.isCutApplied = false;
+                this.showCaliper = false;
+                this.showStain = false;
+                this.particles = [];
+                if (this.slDay) this.slDay.value = 1;
+                if (this.valDay) this.valDay.innerText = "Day 1 of 7";
+                if (this.caliperStatus) { this.caliperStatus.innerText = "OFF"; this.caliperStatus.className = "text-[9px] font-mono font-bold text-slate-500"; }
+                if (this.cutStatus) { this.cutStatus.innerText = "CUT"; this.cutStatus.className = "text-[9px] font-mono font-bold text-rose-600"; }
+                if (this.stainStatus) { this.stainStatus.innerText = "OFF"; this.stainStatus.className = "text-[9px] font-mono font-bold text-slate-500"; }
+                if (this.svgCutIndicator) this.svgCutIndicator.style.display = 'none';
+                this.updateTable();
+                this.updateTelemetry();
+            }
+
+            getCurrentLen(jar) {
+                const idx = this.currentDay - 1;
+                if (jar === 'A') return this.jarA_ref[idx];
+                return this.isCutApplied && idx >= 3 ? this.jarB_cut[idx] : this.jarB_uncut[idx];
+            }
+
+            updateTable() {
+                if (!this.tableBody) return;
+                let html = '';
+                for (let d = 1; d <= 7; d++) {
+                    const idx = d - 1;
+                    const lenA = this.jarA_ref[idx];
+                    const lenB = this.isCutApplied && idx >= 3 ? this.jarB_cut[idx] : (d <= this.currentDay ? this.jarB_uncut[idx] : '-');
+                    const isCurr = d === this.currentDay;
+                    html += `
+                        <tr class="${isCurr ? 'bg-blue-50/80 font-bold' : ''} border-b border-slate-100">
+                            <td class="p-1 border border-slate-200">${d}</td>
+                            <td class="p-1 border border-slate-200 text-blue-700">${d <= this.currentDay ? lenA.toFixed(1) : '-'}</td>
+                            <td class="p-1 border border-slate-200 ${this.isCutApplied && d >= 3 ? 'text-rose-600 font-bold' : 'text-amber-700'}">${lenB !== '-' ? parseFloat(lenB).toFixed(1) : '-'}</td>
+                        </tr>
+                    `;
+                }
+                this.tableBody.innerHTML = html;
+            }
+
+            updateTelemetry() {
+                const lenA = this.getCurrentLen('A');
+                const lenB = this.getCurrentLen('B');
+                
+                if (this.telLenA) this.telLenA.innerText = lenA.toFixed(1);
+                if (this.telLenB) this.telLenB.innerText = lenB.toFixed(1);
+                if (this.telTimeDay) this.telTimeDay.innerText = `Day ${this.currentDay}`;
+                
+                const mDistA = document.getElementById('mobile-dist-a');
+                const mDistB = document.getElementById('mobile-dist-b');
+                if (mDistA) mDistA.innerText = `${lenA.toFixed(1)} cm`;
+                if (mDistB) mDistB.innerText = `${lenB.toFixed(1)} cm`;
+
+                if (this.isCutApplied && this.currentDay >= 3) {
+                    this.telResB.innerText = "GROWTH CEASED (APICAL EXCISION)";
+                    this.telResB.className = "text-[8.5px] font-bold mt-0.5 text-rose-600 uppercase tracking-tight";
+                    this.coachDistanceTag.innerText = `Day ${this.currentDay} • Cut Active`;
+                    this.coachProgressBar.style.width = '100%';
+                    this.coachProgressBar.className = "h-full transition-all duration-300 rounded-full bg-rose-500";
+                    this.coachAdviceText.innerText = "Notice that Jar B's roots stayed at 2.0 cm, proving actively dividing apical meristem is responsible for growth.";
+                } else {
+                    this.telResB.innerText = "Active Cell Division (+0.5cm/d)";
+                    this.telResB.className = "text-[8.5px] font-bold mt-0.5 text-slate-500 uppercase tracking-tight";
+                    this.coachDistanceTag.innerText = `Day ${this.currentDay}`;
+                    this.coachProgressBar.style.width = `${(this.currentDay / 7) * 100}%`;
+                    this.coachProgressBar.className = "h-full transition-all duration-300 rounded-full bg-blue-600";
+                    this.coachAdviceText.innerText = "Both onion bulbs are elongating normally in water through active apical division.";
+                }
+            }
+
+            // --- CANVAS RENDERING LOOP ---
+            draw(w, h) {
+                const ctx = this.ctx;
+                ctx.clearRect(0, 0, w, h);
+                this.bubbleTime = (this.bubbleTime || 0) + 0.03;
+
+                switch(this.currentModule) {
+                    case 'M02': this.drawM02(w, h); break;
+                    case 'M03': this.drawM03(w, h); break;
+                    case 'M04': this.drawM04(w, h); break;
+                    case 'M05': this.drawM05(w, h); break;
+                    case 'M06': this.drawM06(w, h); break;
+                    case 'M07': this.drawM07(w, h); break;
+                    case 'M08': this.drawM08(w, h); break;
+                    case 'M09': this.drawM09(w, h); break;
+                    case 'M10': this.drawM10(w, h); break;
+                    case 'M11': this.drawM11(w, h); break;
+                    case 'M01':
+                    default:
+                        this.drawM01(w, h);
+                        break;
+                }
+
+                // Render falling cut particles
+                for (let i = this.particles.length - 1; i >= 0; i--) {
+                    const p = this.particles[i];
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    p.alpha -= 0.015;
+                    ctx.fillStyle = p.color;
+                    ctx.globalAlpha = Math.max(0, p.alpha);
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, 2.5, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.globalAlpha = 1.0;
+                    if (p.alpha <= 0) this.particles.splice(i, 1);
+                }
+            }
+
+            drawM01(w, h) {
+                const benchY = h * 0.78;
+                this.ctx.fillStyle = '#f1f5f9';
+                this.ctx.fillRect(0, benchY, w, h - benchY);
+                this.ctx.strokeStyle = '#cbd5e1';
+                this.ctx.lineWidth = 2;
+                this.ctx.beginPath(); this.ctx.moveTo(0, benchY); this.ctx.lineTo(w, benchY); this.ctx.stroke();
+
+                // Bench reflection
+                this.ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+                this.ctx.fillRect(0, benchY, w, 15);
+
+                const jarA_x = w * 0.30;
+                const jarB_x = w * 0.70;
+                const jarW = Math.min(170, w * 0.32);
+                const jarH = Math.min(220, h * 0.55);
+                const jarY = benchY - jarH;
+
+                this.drawApparatus(jarA_x, jarY, jarW, jarH, 'Jar A: Control', '#2563eb', this.getCurrentLen('A'), false);
+                this.drawApparatus(jarB_x, jarY, jarW, jarH, 'Jar B: Treatment', '#d97706', this.getCurrentLen('B'), this.isCutApplied);
+            }
+
+            drawM02(w, h) {
+                const ctx = this.ctx;
+                const cx1 = w * 0.32;
+                const cx2 = w * 0.72;
+                const cy = h * 0.52;
+
+                ctx.fillStyle = '#0f172a';
+                ctx.font = 'bold 13px Inter';
+                ctx.textAlign = 'center';
+                ctx.fillText('Vegetative Shoot Growth Zones', cx1, cy - 110);
+
+                ctx.strokeStyle = '#16a34a';
+                ctx.lineWidth = 14;
+                ctx.beginPath();
+                ctx.moveTo(cx1, cy + 100);
+                ctx.lineTo(cx1, cy - 80);
+                ctx.stroke();
+
+                // SAM
+                ctx.fillStyle = '#7c3aed';
+                ctx.beginPath();
+                ctx.arc(cx1, cy - 85, 12, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.fillStyle = '#ffffff';
+                ctx.font = 'bold 9px JetBrains Mono';
+                ctx.fillText('SAM', cx1, cy - 82);
+
+                // Intercalary
+                [-20, 30].forEach((nodeY) => {
+                    ctx.fillStyle = '#f59e0b';
+                    ctx.fillRect(cx1 - 12, cy + nodeY - 6, 24, 12);
+                    ctx.strokeStyle = '#22c55e';
+                    ctx.lineWidth = 3;
+                    ctx.beginPath();
+                    ctx.moveTo(cx1 + 10, cy + nodeY);
+                    ctx.quadraticCurveTo(cx1 + 45, cy + nodeY - 15, cx1 + 55, cy + nodeY - 5);
+                    ctx.stroke();
+                });
+
+                // Trunk Rings
+                ctx.fillStyle = '#0f172a';
+                ctx.font = 'bold 13px Inter';
+                ctx.fillText('Trunk Girth & Annual Rings', cx2, cy - 110);
+
+                const rings = Math.min(15, Math.floor(this.currentDay * 2));
+                const maxRadius = Math.min(100, rings * 6 + 25);
+                for (let r = rings; r >= 1; r--) {
+                    const radius = (r / rings) * maxRadius;
+                    ctx.fillStyle = r % 2 === 0 ? '#fde68a' : '#d97706';
+                    ctx.beginPath();
+                    ctx.arc(cx2, cy, radius, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.strokeStyle = '#78350f';
+                    ctx.lineWidth = 1;
+                    ctx.stroke();
+                }
+
+                ctx.strokeStyle = '#2563eb';
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.arc(cx2, cy, maxRadius - 4, 0, Math.PI * 2);
+                ctx.stroke();
+
+                ctx.fillStyle = '#2563eb';
+                ctx.font = 'bold 11px JetBrains Mono';
+                ctx.fillText(`${rings} Annual Rings (Cambium Active)`, cx2, cy + maxRadius + 22);
+            }
+
+            drawM03(w, h) {
+                const ctx = this.ctx;
+                const cx = w * 0.5;
+                const cy = h * 0.5;
+                const r = Math.min(w, h) * 0.38;
+
+                ctx.save();
+                ctx.beginPath();
+                ctx.arc(cx, cy, r, 0, Math.PI * 2);
+                ctx.clip();
+
+                ctx.fillStyle = this.showStain ? '#fdf2f8' : '#f8fafc';
+                ctx.fillRect(cx - r, cy - r, r * 2, r * 2);
+
+                ctx.strokeStyle = this.showStain ? '#db2777' : '#0284c7';
+                ctx.lineWidth = 5;
+                ctx.beginPath();
+                ctx.arc(cx, cy, r * 0.85, 0, Math.PI * 2);
+                ctx.stroke();
+
+                ctx.fillStyle = this.showStain ? 'rgba(244, 114, 182, 0.25)' : 'rgba(186, 230, 253, 0.25)';
+                ctx.beginPath();
+                ctx.arc(cx, cy, r * 0.85, 0, Math.PI * 2);
+                ctx.fill();
+
+                const bundleCount = 12;
+                for (let b = 0; b < bundleCount; b++) {
+                    const angle = (b / bundleCount) * Math.PI * 2;
+                    const bx = cx + Math.cos(angle) * (r * 0.58);
+                    const by = cy + Math.sin(angle) * (r * 0.58);
+                    
+                    ctx.fillStyle = '#059669';
+                    ctx.beginPath();
+                    ctx.arc(bx, by, 7, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    const xx = cx + Math.cos(angle) * (r * 0.46);
+                    const xy = cy + Math.sin(angle) * (r * 0.46);
+                    ctx.fillStyle = '#dc2626';
+                    ctx.beginPath();
+                    ctx.arc(xx, xy, 8, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+
+                ctx.fillStyle = 'rgba(254, 240, 138, 0.3)';
+                ctx.beginPath();
+                ctx.arc(cx, cy, r * 0.35, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.restore();
+
+                ctx.strokeStyle = '#475569';
+                ctx.lineWidth = 12;
+                ctx.beginPath();
+                ctx.arc(cx, cy, r, 0, Math.PI * 2);
+                ctx.stroke();
+
+                ctx.fillStyle = '#0f172a';
+                ctx.font = 'bold 12px JetBrains Mono';
+                ctx.textAlign = 'center';
+                ctx.fillText(`Sunflower Stem T.S. • Conjoint Bundles (100x)`, cx, cy + r + 24);
+            }
+
+            drawM04(w, h) {
+                const ctx = this.ctx;
+                const cx1 = w * 0.35;
+                const cx2 = w * 0.65;
+                const cy = h * 0.5;
+                const vH = h * 0.65;
+                const vW = 60;
+
+                ctx.fillStyle = '#eff6ff';
+                ctx.strokeStyle = '#2563eb';
+                ctx.lineWidth = 4;
+                ctx.beginPath();
+                ctx.roundRect(cx1 - vW * 0.5, cy - vH * 0.5, vW, vH, 8);
+                ctx.fill(); ctx.stroke();
+
+                for (let i = 0; i < 8; i++) {
+                    const py = ((this.bubbleTime * 120 + i * 45) % vH);
+                    ctx.fillStyle = '#0284c7';
+                    ctx.beginPath();
+                    ctx.arc(cx1, cy + vH * 0.5 - py, 5, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+
+                ctx.fillStyle = '#fffbeb';
+                ctx.strokeStyle = '#d97706';
+                ctx.lineWidth = 4;
+                ctx.beginPath();
+                ctx.roundRect(cx2 - vW * 0.5, cy - vH * 0.5, vW, vH, 8);
+                ctx.fill(); ctx.stroke();
+
+                for (let s = -2; s <= 2; s++) {
+                    const sy = cy + s * (vH * 0.2);
+                    ctx.strokeStyle = '#b45309';
+                    ctx.lineWidth = 2;
+                    ctx.setLineDash([4, 4]);
+                    ctx.beginPath(); ctx.moveTo(cx2 - vW * 0.5, sy); ctx.lineTo(cx2 + vW * 0.5, sy); ctx.stroke();
+                    ctx.setLineDash([]);
+                }
+
+                for (let j = 0; j < 6; j++) {
+                    const py = ((this.bubbleTime * 80 + j * 55) % vH);
+                    ctx.fillStyle = '#d97706';
+                    ctx.beginPath();
+                    ctx.arc(cx2, cy - vH * 0.5 + py, 6, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+
+                ctx.font = 'bold 13px Inter';
+                ctx.textAlign = 'center';
+                ctx.fillStyle = '#1d4ed8';
+                ctx.fillText('Xylem Vessel (H₂O + Minerals ↑)', cx1, cy - vH * 0.5 - 12);
+                ctx.fillStyle = '#b45309';
+                ctx.fillText('Phloem Sieve Tube (Sucrose ↕)', cx2, cy - vH * 0.5 - 12);
+            }
+
+            drawM05(w, h) {
+                const ctx = this.ctx;
+                const cx = w * 0.5;
+                const cy = h * 0.5;
+
+                ctx.fillStyle = '#0f172a';
+                ctx.font = 'bold 14px Inter';
+                ctx.textAlign = 'center';
+                ctx.fillText('Simple Columnar & Ciliated Epithelium', cx, cy - 90);
+
+                ctx.strokeStyle = '#475569';
+                ctx.lineWidth = 4;
+                ctx.beginPath();
+                ctx.moveTo(cx - 180, cy + 40);
+                ctx.lineTo(cx + 180, cy + 40);
+                ctx.stroke();
+
+                const cellW = 36;
+                const cellH = 90;
+                for (let c = -4; c <= 4; c++) {
+                    const x = cx + c * cellW;
+                    const y = cy + 40 - cellH;
+                    
+                    ctx.fillStyle = '#ecfdf5';
+                    ctx.strokeStyle = '#059669';
+                    ctx.lineWidth = 2;
+                    ctx.strokeRect(x, y, cellW, cellH);
+                    ctx.fillRect(x, y, cellW, cellH);
+
+                    ctx.fillStyle = '#047857';
+                    ctx.beginPath();
+                    ctx.ellipse(x + cellW * 0.5, y + cellH * 0.72, 6, 12, 0, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    ctx.strokeStyle = '#10b981';
+                    ctx.lineWidth = 1.8;
+                    for (let hair = 0; hair < 5; hair++) {
+                        const hx = x + 4 + hair * 7;
+                        const sway = Math.sin(this.bubbleTime * 4 + c + hair) * 6;
+                        ctx.beginPath();
+                        ctx.moveTo(hx, y);
+                        ctx.lineTo(hx + sway, y - 14);
+                        ctx.stroke();
+                    }
+                }
+
+                ctx.fillStyle = '#059669';
+                ctx.font = 'bold 11px JetBrains Mono';
+                ctx.fillText('Waving Cilia Sweeping Mucus Particles', cx, cy - 65);
+                ctx.fillStyle = '#475569';
+                ctx.fillText('Extracellular Basement Membrane', cx, cy + 62);
+            }
+
+            drawM06(w, h) {
+                const ctx = this.ctx;
+                const cy = h * 0.5;
+                const vH = 130;
+
+                ctx.fillStyle = '#fff1f2';
+                ctx.fillRect(0, cy - vH * 0.5, w, vH);
+                ctx.strokeStyle = '#e11d48';
+                ctx.lineWidth = 4;
+                ctx.beginPath();
+                ctx.moveTo(0, cy - vH * 0.5); ctx.lineTo(w, cy - vH * 0.5);
+                ctx.moveTo(0, cy + vH * 0.5); ctx.lineTo(w, cy + vH * 0.5);
+                ctx.stroke();
+
+                for (let r = 0; r < 14; r++) {
+                    const rx = ((this.bubbleTime * 140 + r * 65) % (w + 40)) - 20;
+                    const ry = cy + Math.sin(r * 2.5 + this.bubbleTime) * 35;
+                    ctx.fillStyle = '#dc2626';
+                    ctx.beginPath();
+                    ctx.ellipse(rx, ry, 12, 8, Math.sin(this.bubbleTime + r) * 0.3, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.fillStyle = '#b91c1c';
+                    ctx.beginPath();
+                    ctx.arc(rx, ry, 3.5, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+
+                const wx = ((this.bubbleTime * 70) % (w + 40)) - 20;
+                ctx.fillStyle = '#f8fafc';
+                ctx.strokeStyle = '#7c3aed';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.arc(wx, cy, 18, 0, Math.PI * 2);
+                ctx.fill(); ctx.stroke();
+                ctx.fillStyle = '#6d28d9';
+                ctx.beginPath();
+                ctx.arc(wx - 5, cy, 6, 0, Math.PI * 2);
+                ctx.arc(wx + 5, cy, 6, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.fillStyle = '#be123c';
+                ctx.font = 'bold 12px Inter';
+                ctx.textAlign = 'center';
+                ctx.fillText('Liquid Plasma Matrix with Formed Elements (RBCs, WBCs, Platelets)', w * 0.5, cy - vH * 0.5 - 14);
+            }
+
+            drawM07(w, h) {
+                const ctx = this.ctx;
+                const cx = w * 0.5;
+                const cy = h * 0.5;
+                const pulse = Math.sin(this.bubbleTime * 6) * 4;
+
+                ctx.fillStyle = '#0f172a';
+                ctx.font = 'bold 14px Inter';
+                ctx.textAlign = 'center';
+                ctx.fillText('Comparative Muscle Histology', cx, cy - 95);
+
+                const y1 = cy - 45;
+                ctx.fillStyle = '#fee2e2';
+                ctx.fillRect(cx - 180, y1, 360, 26);
+                ctx.strokeStyle = '#b91c1c';
+                ctx.lineWidth = 2;
+                ctx.strokeRect(cx - 180, y1, 360, 26);
+                for (let s = -175; s < 175; s += 8) {
+                    ctx.strokeStyle = '#ef4444';
+                    ctx.lineWidth = 2;
+                    ctx.beginPath(); ctx.moveTo(cx + s, y1); ctx.lineTo(cx + s, y1 + 26); ctx.stroke();
+                }
+
+                const y2 = cy;
+                for (let sp = -2; sp <= 2; sp++) {
+                    const sx = cx + sp * 75;
+                    ctx.fillStyle = '#fef3c7';
+                    ctx.strokeStyle = '#d97706';
+                    ctx.beginPath();
+                    ctx.ellipse(sx, y2, 38, 11, 0, 0, Math.PI * 2);
+                    ctx.fill(); ctx.stroke();
+                    ctx.fillStyle = '#b45309';
+                    ctx.beginPath(); ctx.arc(sx, y2, 4, 0, Math.PI * 2); ctx.fill();
+                }
+
+                const y3 = cy + 45;
+                ctx.fillStyle = '#ede9fe';
+                ctx.fillRect(cx - 180, y3 - pulse * 0.5, 360, 28 + pulse);
+                ctx.strokeStyle = '#7c3aed';
+                ctx.lineWidth = 2;
+                ctx.strokeRect(cx - 180, y3 - pulse * 0.5, 360, 28 + pulse);
+                [-90, 0, 90].forEach(dx => {
+                    ctx.fillStyle = '#5b21b6';
+                    ctx.fillRect(cx + dx, y3 - pulse * 0.5, 5, 28 + pulse);
+                });
+
+                ctx.fillStyle = '#6b7280';
+                ctx.font = 'bold 10px JetBrains Mono';
+                ctx.fillText('1. Skeletal (Striated)', cx - 110, y1 - 4);
+                ctx.fillText('2. Smooth (Spindle)', cx - 110, y2 - 14);
+                ctx.fillText('3. Cardiac (Intercalated Discs, Rhythmic Pulse)', cx, y3 + 42);
+            }
+
+            drawM08(w, h) {
+                const ctx = this.ctx;
+                const cx = w * 0.35;
+                const cy = h * 0.5;
+
+                ctx.fillStyle = '#38bdf8';
+                ctx.strokeStyle = '#0284c7';
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.arc(cx, cy, 32, 0, Math.PI * 2);
+                ctx.fill(); ctx.stroke();
+
+                ctx.fillStyle = '#0369a1';
+                ctx.beginPath();
+                ctx.arc(cx, cy, 12, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.strokeStyle = '#0284c7';
+                ctx.lineWidth = 3;
+                for (let d = 0; d < 6; d++) {
+                    const angle = Math.PI * 0.8 + (d / 5) * Math.PI * 0.8;
+                    ctx.beginPath();
+                    ctx.moveTo(cx + Math.cos(angle) * 32, cy + Math.sin(angle) * 32);
+                    ctx.lineTo(cx + Math.cos(angle) * 45, cy + Math.sin(angle) * 45);
+                    ctx.stroke();
+                }
+
+                const axonEnd = w * 0.82;
+                ctx.strokeStyle = '#64748b';
+                ctx.lineWidth = 5;
+                ctx.beginPath();
+                ctx.moveTo(cx + 32, cy);
+                ctx.lineTo(axonEnd, cy);
+                ctx.stroke();
+
+                const segCount = 4;
+                const segLen = (axonEnd - (cx + 40)) / segCount;
+                for (let s = 0; s < segCount; s++) {
+                    const sx = cx + 45 + s * segLen;
+                    ctx.fillStyle = '#fde047';
+                    ctx.strokeStyle = '#ca8a04';
+                    ctx.lineWidth = 2;
+                    ctx.beginPath();
+                    ctx.roundRect(sx, cy - 12, segLen - 8, 24, 6);
+                    ctx.fill(); ctx.stroke();
+                }
+
+                const sparkX = cx + 40 + ((this.bubbleTime * 140) % (axonEnd - cx - 50));
+                ctx.fillStyle = '#ec4899';
+                ctx.beginPath();
+                ctx.arc(sparkX, cy, 8, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.fillStyle = '#0f172a';
+                ctx.font = 'bold 12px Inter';
+                ctx.textAlign = 'center';
+                ctx.fillText('Neuron: Cyton • Myelinated Axon • Synaptic Bouton', w * 0.5, cy - 65);
+            }
+
+            drawM09(w, h) {
+                const ctx = this.ctx;
+                const cx = w * 0.45;
+                const cy = h * 0.65;
+                const angleRad = (60 * Math.PI) / 180;
+
+                ctx.strokeStyle = '#e2e8f0';
+                ctx.lineWidth = 18;
+                ctx.beginPath();
+                ctx.moveTo(cx - 100, cy - 120);
+                ctx.lineTo(cx, cy);
+                ctx.stroke();
+
+                const forearmLen = 130;
+                const fx = cx + Math.cos(-angleRad) * forearmLen;
+                const fy = cy + Math.sin(-angleRad) * forearmLen;
+                ctx.strokeStyle = '#cbd5e1';
+                ctx.beginPath();
+                ctx.moveTo(cx, cy);
+                ctx.lineTo(fx, fy);
+                ctx.stroke();
+
+                ctx.fillStyle = '#ef4444';
+                ctx.strokeStyle = '#b91c1c';
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.ellipse(cx - 45, cy - 60, 24, 45, -0.6, 0, Math.PI * 2);
+                ctx.fill(); ctx.stroke();
+
+                ctx.fillStyle = '#2563eb';
+                ctx.beginPath(); ctx.arc(cx, cy, 10, 0, Math.PI * 2); ctx.fill();
+
+                ctx.fillStyle = '#475569';
+                ctx.beginPath(); ctx.arc(fx, fy, 12, 0, Math.PI * 2); ctx.fill();
+
+                ctx.fillStyle = '#0f172a';
+                ctx.font = 'bold 13px Inter';
+                ctx.textAlign = 'center';
+                ctx.fillText('Class-3 Forearm Lever • Biceps Bulging', w * 0.5, cy - 140);
+            }
+
+            drawM10(w, h) {
+                const ctx = this.ctx;
+                const cx1 = w * 0.30;
+                const cx2 = w * 0.70;
+                const cy = h * 0.52;
+
+                ctx.fillStyle = '#0f172a';
+                ctx.font = 'bold 13px Inter';
+                ctx.textAlign = 'center';
+                ctx.fillText('1. Ball-and-Socket (Shoulder)', cx1, cy - 90);
+
+                ctx.strokeStyle = '#475569';
+                ctx.lineWidth = 10;
+                ctx.beginPath();
+                ctx.arc(cx1, cy, 45, Math.PI * 0.5, Math.PI * 1.5);
+                ctx.stroke();
+
+                ctx.fillStyle = '#38bdf8';
+                ctx.beginPath();
+                ctx.arc(cx1 + 8, cy, 32, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.fillStyle = '#0f172a';
+                ctx.fillText('2. Hinge Joint (Elbow)', cx2, cy - 90);
+
+                ctx.strokeStyle = '#94a3b8';
+                ctx.lineWidth = 14;
+                ctx.beginPath();
+                ctx.moveTo(cx2, cy - 65);
+                ctx.lineTo(cx2, cy);
+                ctx.lineTo(cx2 + 65, cy + 30);
+                ctx.stroke();
+
+                ctx.fillStyle = '#10b981';
+                ctx.beginPath();
+                ctx.arc(cx2, cy, 14, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.fillStyle = '#059669';
+                ctx.font = 'bold 11px JetBrains Mono';
+                ctx.fillText('Synovial Fluid Cushion (μ ≈ 0.003)', w * 0.5, cy + 95);
+            }
+
+            drawM11(w, h) {
+                const ctx = this.ctx;
+                const cx = w * 0.5;
+                const cy = h * 0.5;
+
+                ctx.fillStyle = '#0f172a';
+                ctx.font = 'bold 14px Inter';
+                ctx.textAlign = 'center';
+                ctx.fillText('Axial Skeleton (Cranium, Ribcage, Spine) & Appendicular Limbs', cx, cy - 110);
+
+                ctx.fillStyle = '#bae6fd';
+                ctx.strokeStyle = '#0284c7';
+                ctx.lineWidth = 2.5;
+                ctx.beginPath();
+                ctx.arc(cx, cy - 70, 22, 0, Math.PI * 2);
+                ctx.fill(); ctx.stroke();
+
+                ctx.strokeStyle = '#0284c7';
+                ctx.lineWidth = 6;
+                ctx.beginPath();
+                ctx.moveTo(cx, cy - 48);
+                ctx.lineTo(cx, cy + 60);
+                ctx.stroke();
+
+                for (let r = 0; r < 6; r++) {
+                    const ry = cy - 35 + r * 14;
+                    ctx.strokeStyle = '#38bdf8';
+                    ctx.lineWidth = 2.5;
+                    ctx.beginPath();
+                    ctx.ellipse(cx, ry, 34 + r * 2, 8, 0, 0, Math.PI);
+                    ctx.stroke();
+                }
+
+                ctx.strokeStyle = '#f59e0b';
+                ctx.lineWidth = 4;
+                ctx.beginPath();
+                ctx.moveTo(cx - 38, cy - 25); ctx.lineTo(cx - 75, cy + 20);
+                ctx.moveTo(cx + 38, cy - 25); ctx.lineTo(cx + 75, cy + 20);
+                ctx.moveTo(cx - 15, cy + 60); ctx.lineTo(cx - 35, cy + 120);
+                ctx.moveTo(cx + 15, cy + 60); ctx.lineTo(cx + 35, cy + 120);
+                ctx.stroke();
+
+                ctx.fillStyle = '#0284c7';
+                ctx.font = 'bold 11px JetBrains Mono';
+                ctx.fillText('Blue: Axial (80 Bones) • Amber: Appendicular (126 Bones)', cx, cy + 130);
+            }
+
+            drawApparatus(x, y, w, h, label, color, rootLenCm, isCut) {
+                const ctx = this.ctx;
+                const cx = x;
+                const cy = y;
+
+                // Glass Jar Shadow
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.04)';
+                ctx.beginPath();
+                ctx.ellipse(cx, cy + h + 2, w * 0.52, 10, 0, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Glass Jar Body (3D cylindrical shading)
+                const jarGrad = ctx.createLinearGradient(cx - w * 0.5, cy, cx + w * 0.5, cy);
+                jarGrad.addColorStop(0, 'rgba(241, 245, 249, 0.85)');
+                jarGrad.addColorStop(0.2, 'rgba(255, 255, 255, 0.95)');
+                jarGrad.addColorStop(0.8, 'rgba(241, 245, 249, 0.75)');
+                jarGrad.addColorStop(1, 'rgba(203, 213, 225, 0.6)');
+
+                ctx.fillStyle = jarGrad;
+                ctx.strokeStyle = '#94a3b8';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.roundRect(cx - w * 0.45, cy + h * 0.15, w * 0.9, h * 0.85, [0, 0, 16, 16]);
+                ctx.fill();
+                ctx.stroke();
+
+                // Water filling (Translucent blue)
+                const waterY = cy + h * 0.28;
+                const waterH = h * 0.70;
+                ctx.fillStyle = 'rgba(186, 230, 253, 0.45)';
+                ctx.beginPath();
+                ctx.roundRect(cx - w * 0.43, waterY, w * 0.86, waterH, [0, 0, 14, 14]);
+                ctx.fill();
+
+                // Water meniscus wave
+                ctx.strokeStyle = 'rgba(56, 189, 248, 0.8)';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(cx - w * 0.43, waterY);
+                ctx.bezierCurveTo(cx - w * 0.2, waterY + 3, cx + w * 0.2, waterY - 3, cx + w * 0.43, waterY);
+                ctx.stroke();
+
+                // Onion Bulb sitting on jar rim
+                const bulbY = cy + h * 0.18;
+                const bulbR = w * 0.28;
+
+                // Onion outer skin (golden brown gradient)
+                const onionGrad = ctx.createRadialGradient(cx - 8, bulbY - 6, 4, cx, bulbY, bulbR);
+                onionGrad.addColorStop(0, '#fde68a');
+                onionGrad.addColorStop(0.5, '#f59e0b');
+                onionGrad.addColorStop(1, '#b45309');
+                ctx.fillStyle = onionGrad;
+                ctx.beginPath();
+                ctx.ellipse(cx, bulbY, bulbR, bulbR * 0.85, 0, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.strokeStyle = '#78350f';
+                ctx.lineWidth = 1.5;
+                ctx.stroke();
+
+                // Onion green shoot at top
+                ctx.strokeStyle = '#16a34a';
+                ctx.lineWidth = 3.5;
+                ctx.beginPath();
+                ctx.moveTo(cx, bulbY - bulbR * 0.8);
+                ctx.quadraticCurveTo(cx - 6, bulbY - bulbR * 1.3, cx - 12, bulbY - bulbR * 1.6);
+                ctx.moveTo(cx + 2, bulbY - bulbR * 0.8);
+                ctx.quadraticCurveTo(cx + 8, bulbY - bulbR * 1.3, cx + 14, bulbY - bulbR * 1.5);
+                ctx.stroke();
+
+                // Onion Roots bundle dipping into water
+                const rootOriginY = bulbY + bulbR * 0.72;
+                const pxPerCm = 24;
+                const rootLengthPx = rootLenCm * pxPerCm;
+
+                ctx.strokeStyle = this.showStain ? '#e11d48' : '#ffffff';
+                ctx.lineWidth = 2.2;
+                ctx.lineCap = 'round';
+
+                for (let r = -4; r <= 4; r++) {
+                    const spread = r * (w * 0.05);
+                    const endX = cx + spread * 1.3;
+                    const endY = rootOriginY + rootLengthPx + Math.sin(r * 2) * 4;
+
+                    ctx.beginPath();
+                    ctx.moveTo(cx + spread * 0.6, rootOriginY);
+                    ctx.quadraticCurveTo(cx + spread, rootOriginY + rootLengthPx * 0.5, endX, endY);
+                    ctx.stroke();
+
+                    // Apical Tip Cap (Purple/Red dot showing dividing zone)
+                    if (!isCut || this.currentDay < 3) {
+                        ctx.fillStyle = '#7c3aed';
+                        ctx.beginPath();
+                        ctx.arc(endX, endY, 3, 0, Math.PI * 2);
+                        ctx.fill();
+                    } else {
+                        // Snipped blunt tip
+                        ctx.strokeStyle = '#dc2626';
+                        ctx.lineWidth = 2;
+                        ctx.beginPath();
+                        ctx.moveTo(endX - 3, endY);
+                        ctx.lineTo(endX + 3, endY);
+                        ctx.stroke();
+                    }
+                }
+
+                // Digital Caliper Overlay if toggled
+                if (this.showCaliper) {
+                    ctx.strokeStyle = '#0284c7';
+                    ctx.lineWidth = 1.5;
+                    ctx.setLineDash([4, 3]);
+                    ctx.beginPath();
+                    ctx.moveTo(cx - w * 0.5, rootOriginY);
+                    ctx.lineTo(cx + w * 0.5, rootOriginY);
+                    ctx.moveTo(cx - w * 0.5, rootOriginY + rootLengthPx);
+                    ctx.lineTo(cx + w * 0.5, rootOriginY + rootLengthPx);
+                    ctx.stroke();
+                    ctx.setLineDash([]);
+
+                    ctx.fillStyle = '#0369a1';
+                    ctx.font = 'bold 11px JetBrains Mono';
+                    ctx.textAlign = 'left';
+                    ctx.fillText(`${rootLenCm.toFixed(1)} cm`, cx + w * 0.38, rootOriginY + rootLengthPx * 0.5 + 4);
+                }
+
+                // Label Header
+                ctx.fillStyle = '#0f172a';
+                ctx.font = 'bold 12px Inter';
+                ctx.textAlign = 'center';
+                ctx.fillText(label, cx, cy - 8);
+
+                ctx.fillStyle = color;
+                ctx.font = '600 10.5px JetBrains Mono';
+                ctx.fillText(`Length: ${rootLenCm.toFixed(1)} cm`, cx, cy + h + 24);
+            }
+
+            loop(t) {
+                const w = this.canvas.clientWidth;
+                const h = this.canvas.clientHeight;
+                this.draw(w, h);
+                requestAnimationFrame((timestamp) => this.loop(timestamp));
+            }
+
+            // Modal Handlers
+            openQuizModal() {
+                const m = document.getElementById('quiz-modal');
+                if (m) m.classList.remove('hidden');
+                this.playClickSound(600, 0.05);
+            }
+
+            closeQuizModal() {
+                const m = document.getElementById('quiz-modal');
+                if (m) m.classList.add('hidden');
+            }
+
+            submitQuiz() {
+                const q1 = document.querySelector('input[name="q1"]:checked');
+                const q2 = document.querySelector('input[name="q2"]:checked');
+                let score = 0;
+                if (q1 && q1.value === 'b') score++;
+                if (q2 && q2.value === 'b') score++;
+                
+                const badge = document.getElementById('quiz-score-badge');
+                if (badge) {
+                    badge.innerText = `Score: ${score}/2 (${Math.round(score/2*100)}%)`;
+                    badge.className = score === 2 ? "font-mono text-xs font-bold text-emerald-600" : "font-mono text-xs font-bold text-amber-600";
+                }
+
+                if (score === 2) {
+                    this.playCelebration();
+                    if (window.confetti) confetti({ particleCount: 80, spread: 65, origin: { y: 0.6 } });
+                } else {
+                    this.playClickSound(300, 0.1);
+                }
+            }
+
+            openTheoryModal() {
+                const m = document.getElementById('theory-modal');
+                if (m) m.classList.remove('hidden');
+                this.playClickSound(600, 0.05);
+            }
+
+            closeTheoryModal() {
+                const m = document.getElementById('theory-modal');
+                if (m) m.classList.add('hidden');
+            }
+        }
+
+        window.onload = () => {
+            window.sim = new VirtualLabSimulation();
+        };
+    </script>
+</body>
 </html>
